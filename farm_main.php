@@ -540,6 +540,11 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         <?php
         $hh = substr($timeStr, 0, 2);
         $m0 = substr($timeStr, 2, 1);
+        $min = substr($timeStr, 2, 2);
+        if ($min > 50) {
+          $min = 50;
+        }
+
         for ($i = 0; $i < 10; $i++) {
 
           // file_existsで検索する場合はIPアドレスから指定してあげる。
@@ -552,10 +557,11 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
         ?>
           <td width="10%" algin="center" style="text-align:center;">
-            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', substr($timeStr, 2, 2) + $i); ?><br />
-            <!-- <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 . $i ?>00&camera=<?php echo $camera_id ?>"> -->
+            <?php //echo substr($timeStr, 0, 2); 
+            ?>:<?php //echo sprintf('%02d', substr($timeStr, 2, 2) + $i); 
+                ?><br />
+            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
             <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $m0 . $i . "00"; ?>');">
-            <!-- </a> -->
           </td>
         <?php } ?>
       </tr>
