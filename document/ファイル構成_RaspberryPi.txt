@@ -1,0 +1,40 @@
+OS
+Raspbian-buster-Lite 2020-02-05.img
+
+本体
+RaspberryPi 4 Model B
+
+インストール
+・SHT30用
+i2c-tools
+python-smbus
+
+カメラ用
+opencv-python + ライブラリ多数
+ffmpeg
+
+ネットワーク・フォルダ関係
+ntfs-3g		SSDフォーマット用(Win向け)
+chkconfig	cron
+samba		SSDのフォルダ公開用
+git		インストール用
+python3-pip	インストール用
+dnsmasq		
+ngrok		遠隔SSH用
+
+
+systemまわり
+
+/home/pi/mainsys	ここに大体入っています
+get_soil_logger.py	土壌センサー数値取得用
+sht30.py		気温・湿度取得用
+insert.py		mysqlへの値登録用
+cap_ipcam.py		IPカメラから画像を取得しサーバへアップする
+
+opencv
+version 4.1.0
+
+接続
+192.168.2.75
+pi
+raspberry

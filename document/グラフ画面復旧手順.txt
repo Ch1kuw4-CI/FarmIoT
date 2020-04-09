@@ -1,0 +1,8 @@
+グラフ画面復旧手順
+
+
+php-mysqlの再インストール
+yum install php-mysql
+
+Apacheの再起動
+/etc/init.d/httpd restart

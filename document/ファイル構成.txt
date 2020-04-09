@@ -1,0 +1,25 @@
+
+
+farmIoT_alert_notify.py
+　アラート通知処理のPython
+
+farm_graph.php
+　グラフ画面
+
+
+farm_index.php
+　ログイン画面
+
+farm_main.php
+　メイン画面
+　　サムネイル表示
+　　画像連結処理
+
+
+farm_menu.php
+　メニュー制御
+
+
+サーバにOpenCVインストール。
+いろいろ試したけど、結局これだけ
+https://qiita.com/fiftystorm36/items/1a285b5fbf99f8ac82eb
