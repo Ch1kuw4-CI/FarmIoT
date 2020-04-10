@@ -324,8 +324,10 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         return;
       }
 
+      // 画像結合処理のURLを変数に格納
+      serv_url = "http://160.16.239.88/farm/img_merge.php"
       // 画像連結処理のウィンドウを開く
-      window.open("http://160.16.239.88/farm/img_merge.php?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
+      window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
 
       //テストてきにいったんウィンドウが開いたらローディング画像を削除する
       removeLoading();
@@ -440,7 +442,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tr>
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image">
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer">
             <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
           </a>
         </td>
