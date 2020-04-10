@@ -32,7 +32,7 @@ def dataset():
   global soil
   soil = get_soil_logger.main_c()
   #####TEST 実装時に削除する#####
-  soil = [10.0, 10.0, 10.0]
+  # soil = [10.0, 10.0, 10.0]
   #####TEST 実装時に削除する#####
 
 

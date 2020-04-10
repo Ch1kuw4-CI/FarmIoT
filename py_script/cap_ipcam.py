@@ -20,7 +20,7 @@ def main():
     global ipcam
     global im_path
     global serverpath
-    ipcam = "rtsp://admin:pm#corporate2@192.168.2.96/554/Streaming/Channels/1"
+    ipcam = "rtsp://admin:pm#corporate2@192.168.5.101/554/Streaming/Channels/1"
     im_path = '/home/pi/mainsys/images/1/'
     serverpath = "/home/miura/images/1/"
     get_camera_info()
@@ -65,14 +65,14 @@ def image_cap():
         cv2.imwrite(imnam, frame)
     if ret == False:
         print("imageerror")
-    print(cap)
+    #print(cap)
     # 終了
     cap.release()
     # サムネイル画像作成　大きさは固定なので値そのまま書き込み
+    #print(imnam)
     mini = cv2.imread(imnam)
     mini2 = cv2.resize(mini, (85, 48))
     cv2.imwrite(imnam_mini, mini2)
-
 
 def fileup():
     # ファイルのアップロード　コマンド呼び出しで対応
@@ -82,9 +82,9 @@ def fileup():
     subprocess.call(upcall.split())
     upcall = 'sudo scp -C ' + imnam_mini + ' root@160.16.239.88:' + serverpath + day + '/'
     subprocess.call(upcall.split())
-    print(imnam)
-    print(imnam_mini)
-    print(upcall)
+    #print(imnam)
+    #print(imnam_mini)
+    #print(upcall)
 
 # main関数を呼び出す
 if __name__ == '__main__':
