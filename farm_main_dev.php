@@ -325,7 +325,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       }
 
       // 画像連結処理のウィンドウを開く
-      window.open("http://160.16.239.88/farm/farm_main.php?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "camera=" + <?php echo $camera_id ?>)
+      window.open("http://160.16.239.88/farm/img_merge.php?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "camera=" + <?php echo $camera_id ?>)
 
       // 非同期処理
       // $.ajax({
