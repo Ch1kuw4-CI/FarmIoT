@@ -412,7 +412,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 </head>
 
 <body>
-  <div style="background-color:#FFF;height: 50px;">
+  <div style="background-color:#FFF;height: 40px;">
     <table align="right">
       <td>
         <form action="farm_main_dev.php" method="post" name="aForm">
@@ -422,8 +422,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </form>
       </td>
     </table>
-    <hr>
   </div>
+  <hr>
   <div>
     <form method='POST' action='farm_main_dev.php'>
       <table>
