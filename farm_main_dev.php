@@ -413,10 +413,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <body>
   <div style="background-color:#FFF;height: 40px;">
-    <table align="right">
+    <table>
       <td>
         <form action="farm_main_dev.php" method="post" name="aForm">
-          <!-- <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>"> -->
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
           <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
         </form>
