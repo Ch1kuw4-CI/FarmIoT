@@ -425,11 +425,16 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     <hr>
 
     <form method='POST' action='farm_main.php'>
-      <select name='camera'>
-        <?php
-        echo $camera_data; ?>
-      </select>
-      <input type='submit' value='送信' />
+      <table>
+        <td>
+          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+          <select name='camera'>
+            <?php
+            echo $camera_data; ?>
+          </select>
+          <input type='submit' value='送信' />
+        </td>
+      </table>
     </form>
     <hr>
 
