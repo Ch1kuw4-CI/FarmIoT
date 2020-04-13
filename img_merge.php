@@ -74,3 +74,7 @@ exec($exec_py, $result_py, $result_val);
 echo "実行コマンド" . $exec_py;
 echo "実行結果" . $result_py[0];
 echo "静止画データ結合成功" . $result_val;
+?>
+<script>
+    window.close
+</script>
