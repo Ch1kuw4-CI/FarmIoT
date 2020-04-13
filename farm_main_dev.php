@@ -171,7 +171,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
   <meta http-equiv="Refresh" content="300">
-  <title>撮影画像</title>
+  <title>開発用テスト画面_撮影画像</title>
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" href="css/main.css" />
@@ -260,7 +260,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
      * @return void
      */
     function goImage() {
-      aForm.action = "farm_main.php";
+      aForm.action = "farm_main_dev.php";
       aForm.submit();
     }
 
@@ -413,10 +413,10 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <body>
   <div style="background-color:#FFF;height: 100px;">
-    <table borde=0 width="100%">
+    <table borde=0 width="100%" align="right">
       <td>
-        <form action="farm_main.php" method="post" name="aForm">
-          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+        <form action="farm_main_dev.php" method="post" name="aForm">
+          <!-- <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>"> -->
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
           <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
         </form>
@@ -424,7 +424,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </table>
     <hr>
 
-    <form method='POST' action='farm_main.php'>
+    <form method='POST' action='farm_main_dev.php'>
       <table>
         <td>
           <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
@@ -454,7 +454,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       </tr>
     </table>
 
-    <form action="farm_main.php" method="POST" style="padding-top: 10px;" width="50%">
+    <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
       <table align="center">
         <tr>
           <th>開始日</th>
