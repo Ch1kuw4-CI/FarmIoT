@@ -76,5 +76,5 @@ echo "実行結果" . $result_py[0];
 echo "静止画データ結合成功" . $result_val;
 ?>
 <script>
-    window.close
+    window.close()
 </script>
