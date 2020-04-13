@@ -414,7 +414,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <body>
   <div style="background-color:#FFF;height: 40px;">
-    <table>
+    <table width="100%">
       <td>
         <form action="farm_main_dev.php" method="post" name="aForm">
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
@@ -423,7 +423,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       </td>
     </table>
   </div>
-  <hr>
+  <hr width="100%">
   <div>
     <form method='POST' action='farm_main_dev.php'>
       <table>
@@ -437,7 +437,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </td>
       </table>
     </form>
-    <hr>
+    <hr width="100%">
 
     <?php echo substr($dateStr, 0, 4); ?>/<?php echo substr($dateStr, 4, 2); ?>/<?php echo substr($dateStr, 6, 2); ?>
 
@@ -456,7 +456,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </table>
 
     <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
-      <table align="center">
+      <table align="center" width="100%">
         <tr>
           <th>開始日</th>
           <td>
