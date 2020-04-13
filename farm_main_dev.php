@@ -413,7 +413,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <body>
   <div style="background-color:#FFF;height: 50px;">
-    <table borde=0 width="100%" align="right">
+    <table align="right">
       <td>
         <form action="farm_main_dev.php" method="post" name="aForm">
           <!-- <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>"> -->
