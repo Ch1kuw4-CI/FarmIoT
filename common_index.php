@@ -43,7 +43,7 @@ if (isset($_POST['login'])) {
 <body>
     <h1>ログイン</h1>
     <p style="color: red"><?php echo $message ?></p>
-    <form method="post" action="farm_index.php">
+    <form method="post" action="common_index.php">
         <label for="email">ユーザーID</label>
         <input id="id" type="id" name="id">
         <br>
