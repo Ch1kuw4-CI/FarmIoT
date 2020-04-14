@@ -171,7 +171,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
   <meta http-equiv="Refresh" content="300">
-  <title>撮影画像</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+  <title>開発用テスト画面_撮影画像</title>
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" href="css/main.css" />
@@ -260,7 +261,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
      * @return void
      */
     function goImage() {
-      aForm.action = "farm_main.php";
+      aForm.action = "farm_main_dev.php";
       aForm.submit();
     }
 
@@ -324,8 +325,13 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         return;
       }
 
+      // 画像結合処理のURLを変数に格納
+      serv_url = "http://160.16.239.88/farm/img_merge.php"
       // 画像連結処理のウィンドウを開く
-      window.open("http://160.16.239.88/farm/img_merge.php?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
+      window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
+
+      //テストてきにいったんウィンドウが開いたらローディング画像を削除する
+      removeLoading();
 
       // 非同期処理
       // $.ajax({
@@ -407,24 +413,29 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 </head>
 
 <body>
-  <div style="background-color:#FFF;height: 100px;">
-    <table borde=0 width="100%">
+  <div style="background-color:#FFF;height: 40px;">
+    <table>
       <td>
-        <form action="farm_main.php" method="post" name="aForm">
-          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+        <form action="farm_main_dev.php" method="post" name="aForm">
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
           <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
         </form>
       </td>
     </table>
-    <hr>
-
-    <form method='POST' action='farm_main.php'>
-      <select name='camera'>
-        <?php
-        echo $camera_data; ?>
-      </select>
-      <input type='submit' value='送信' />
+  </div>
+  <hr>
+  <div>
+    <form method='POST' action='farm_main_dev.php'>
+      <table>
+        <td>
+          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+          <select name='camera'>
+            <?php
+            echo $camera_data; ?>
+          </select>
+          <input type='submit' value='送信' />
+        </td>
+      </table>
     </form>
     <hr>
 
@@ -437,14 +448,14 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tr>
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image">
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer">
             <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
           </a>
         </td>
       </tr>
     </table>
 
-    <form action="farm_main.php" method="POST" style="padding-top: 10px;" width="50%">
+    <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
       <table align="center">
         <tr>
           <th>開始日</th>
