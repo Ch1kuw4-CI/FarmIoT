@@ -8,7 +8,8 @@ import time , datetime
 def LINE_notify(LINE_MESSAGE):
     url = "https://notify-api.line.me/api/notify"
 #    token = #Here ACCESS-TOKEN input
-    token = "EujRE1ZyuRxXT8JCpwM2Z6o3zfQ5pGIrjbjTbK2aykp" # <--TEST用のLINEトークン
+#    token = "ObFoG8pLNgIGpm04j7t0abp9wKMAJAuHHp08VFihIOb" #<-TEST用のLINEトークン
+    token = "EujRE1ZyuRxXT8JCpwM2Z6o3zfQ5pGIrjbjTbK2aykp" # <--くろぜむアラート用のLINEトークン
     headers = {"Authorization" : "Bearer "+ token}
     payload = {"message" :  LINE_MESSAGE}
 
@@ -18,15 +19,15 @@ def LINE_notify(LINE_MESSAGE):
 # LINEへ通知するメッセージを設定
 def MESSAGE_SET(STR_MESSAGE):
     if LIMIT_TBL_ITEM == "SOIL_TEMP":
-        STR_MESSAGE = STR_MESSAGE + "土壌温度(" + format(CURRENT_VALUE) + "℃)"
+        STR_MESSAGE = STR_MESSAGE + "\n土壌温度(" + format(CURRENT_VALUE) + "℃)"
     elif LIMIT_TBL_ITEM == "SOIL_WET":
-        STR_MESSAGE = STR_MESSAGE + "土壌湿度(" + format(CURRENT_VALUE) + "%)"
+        STR_MESSAGE = STR_MESSAGE + "\n土壌湿度(" + format(CURRENT_VALUE) + "%)"
     elif LIMIT_TBL_ITEM == "SOIL_EC":
-        STR_MESSAGE = STR_MESSAGE + "土壌電気伝導度(" + format(CURRENT_VALUE) + "mS/cm)"
+        STR_MESSAGE = STR_MESSAGE + "\n土壌電気伝導度(" + format(CURRENT_VALUE) + "mS/cm)"
     elif LIMIT_TBL_ITEM == "AIR_TEMP_1":
-        STR_MESSAGE = STR_MESSAGE + "気温(" + format(CURRENT_VALUE) + "℃)"
+        STR_MESSAGE = STR_MESSAGE + "\n気温(" + format(CURRENT_VALUE) + "℃)"
     elif LIMIT_TBL_ITEM == "AIR_WET":
-        STR_MESSAGE = STR_MESSAGE + "湿度(" + format(CURRENT_VALUE) + "%)"
+        STR_MESSAGE = STR_MESSAGE + "\n湿度(" + format(CURRENT_VALUE) + "%)"
     else:
         pass
     return STR_MESSAGE
@@ -37,7 +38,7 @@ BEFORE_10min = time.time() - 600
 BEFORE_10min = datetime.datetime.fromtimestamp(BEFORE_10min)
 
 # LINE通知のメッセージタイトルを設定
-LINE_MESSAGE = " << 農地IoT　アラート >>\n"
+LINE_MESSAGE = "<< 農業IoTアラート >>"
 ALERT_FLG = "OFF" # LINEアラートが発生したら"ON"になる
 
 
@@ -63,7 +64,10 @@ if format(DAYTIME) > format(BEFORE_10min):
     # しきい値テーブルからレコード取得
     cur = conn.cursor()
     cur2 = conn.cursor()
-    cur.execute("select * from limit_tbl where item <> 'SYSTEM';")
+# --< 2020/04/15 UPDATE-START >--
+#    cur.execute("select * from limit_tbl where item <> 'SYSTEM';")
+    cur.execute("select * from limit_tbl where item in ('SOIL_TEMP','SOIL_WET','AIR_TEMP_1','AIR_WET');")
+# --< 2020/04/15 UPDATE-END >--
     for row in cur.fetchall():
         # テーブルの要素を変数に入れる
         LIMIT_TBL_ITEM = row[1]
@@ -96,13 +100,13 @@ if format(DAYTIME) > format(BEFORE_10min):
             elif (LIMIT_TBL_FLG == "2"): # フラグの値が"2"なら"OK"を立て、復旧のLINEメッセージを設定
                 ALERT_FLG = "ON" # アラート通知を"ON"にする（復旧のLINE通知）
                 LIMIT_TBL_FLG = "OK"
-                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が範囲内になりました。\n"
+                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が範囲内になりました。"
             else:
                 pass
         elif (CURRENT_VALUE < LIMIT_TBL_MIN): # 最低値を下回った場合
             if (LIMIT_TBL_FLG == "OK"): # フラグの値が"OK"ならLINEアラート通知（低下）
                 ALERT_FLG = "ON" # アラート通知を"ON"にする（発生のLINE通知）
-                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が設定値より低下しました。\n"
+                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が設定値より低下しました。"
             else:
                 pass
             LIMIT_TBL_FLG = "NG" # リミットテーブルのフラグに"NG"を立てる
@@ -110,7 +114,7 @@ if format(DAYTIME) > format(BEFORE_10min):
         elif (CURRENT_VALUE > LIMIT_TBL_MAX): # 最大値を上回った場合
             if (LIMIT_TBL_FLG == "OK"): # フラグの値が"OK"ならLINEアラート通知（超過）
                 ALERT_FLG = "ON" # アラート通知を"ON"にする（発生のLINE通知）
-                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が設定値を超過しました。\n"
+                LINE_MESSAGE = MESSAGE_SET(LINE_MESSAGE) + "が設定値を超過しました。"
             else:
                 pass
             LIMIT_TBL_FLG = "NG" # リミットテーブルのフラグに"NG"を立てる
@@ -125,7 +129,7 @@ if format(DAYTIME) > format(BEFORE_10min):
         LIMIT_TBL_FLG  = row[4]
     if LIMIT_TBL_FLG == "NG":
         ALERT_FLG = "ON" # アラート通知を"ON"にする（発生のLINE通知）
-        LINE_MESSAGE = LINE_MESSAGE + "計測が再開されました。"
+        LINE_MESSAGE = LINE_MESSAGE + "\n計測が再開されました。"
         # リミットテーブルの更新
         cur2.execute("UPDATE limit_tbl SET flg_sts = 'OK' WHERE item = 'SYSTEM';")
 
@@ -138,7 +142,7 @@ else: # 古い測定値なので測定停止のアラート通知を行う
         LIMIT_TBL_FLG  = row[4]
     if LIMIT_TBL_FLG == "OK":
         ALERT_FLG = "ON" # アラート通知を"ON"にする（発生のLINE通知）
-        LINE_MESSAGE = LINE_MESSAGE + "計測が停止しています。"
+        LINE_MESSAGE = LINE_MESSAGE + "\n計測が停止しています。"
         # リミットテーブルの更新
         cur.execute("UPDATE limit_tbl SET flg_sts = 'NG' WHERE item = 'SYSTEM';")
     cur.close
