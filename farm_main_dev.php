@@ -188,7 +188,6 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     function viewImage($timeStr) {
       $times = $timeStr.toString();
       document.getElementById("mainImg").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
-      var large_img = document.getElementById("mainImg_large")
       document.getElementById("mainImg_large").href = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       var img = new Image();
       img.src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";

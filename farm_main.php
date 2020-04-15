@@ -187,12 +187,12 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     function viewImage($timeStr) {
       $times = $timeStr.toString();
       document.getElementById("mainImg").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
-      document.getElementById("mainImg_large").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
+      document.getElementById("mainImg_large").href = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       var img = new Image();
       img.src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       img.onerror = function() {
         document.getElementById("mainImg").src = "img/Noimage_image.png";
-        document.getElementById("mainImg_large").src = "img/Noimage_image.png";
+        document.getElementById("mainImg_large").href = "img/Noimage_image.png";
       }
       document.getElementById("mainImg").style.display = "block";
     }
