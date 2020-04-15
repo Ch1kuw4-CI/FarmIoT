@@ -64,7 +64,10 @@ if format(DAYTIME) > format(BEFORE_10min):
     # しきい値テーブルからレコード取得
     cur = conn.cursor()
     cur2 = conn.cursor()
-    cur.execute("select * from limit_tbl where item <> 'SYSTEM';")
+# --< 2020/04/15 UPDATE-START >--
+#    cur.execute("select * from limit_tbl where item <> 'SYSTEM';")
+    cur.execute("select * from limit_tbl where item in ('SOIL_TEMP','SOIL_WET','AIR_TEMP_1','AIR_WET');")
+# --< 2020/04/15 UPDATE-END >--
     for row in cur.fetchall():
         # テーブルの要素を変数に入れる
         LIMIT_TBL_ITEM = row[1]
