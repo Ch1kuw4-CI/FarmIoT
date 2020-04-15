@@ -404,24 +404,29 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 </head>
 
 <body>
-  <div style="background-color:#FFF;height: 100px;">
-    <table borde=0 width="100%">
+  <div style="background-color:#FFF;height: 40px;">
+    <table>
       <td>
         <form action="farm_main.php" method="post" name="aForm">
-          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
           <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
         </form>
       </td>
     </table>
-    <hr>
-
+  </div>
+  <hr>
+  <div>
     <form method='POST' action='farm_main.php'>
-      <select name='camera'>
-        <?php
-        echo $camera_data; ?>
-      </select>
-      <input type='submit' value='送信' />
+      <table>
+        <td>
+          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+          <select name='camera'>
+            <?php
+            echo $camera_data; ?>
+          </select>
+          <input type='submit' value='送信' />
+        </td>
+      </table>
     </form>
     <hr>
 
@@ -434,7 +439,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tr>
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image">
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer">
             <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
           </a>
         </td>
