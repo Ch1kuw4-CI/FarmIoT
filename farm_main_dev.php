@@ -562,7 +562,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         }
 
         for ($i = 0; $i < 10; $i++) {
-          if ($min = 0) {
+          if ($min == 0) {
             $d_min = $m0 . $i;
           } else {
             $d_min = $min + $i;
