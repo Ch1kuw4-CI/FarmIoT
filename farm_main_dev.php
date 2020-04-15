@@ -188,10 +188,12 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     function viewImage($timeStr) {
       $times = $timeStr.toString();
       document.getElementById("mainImg").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
+      document.getElementById("mainImg_large").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       var img = new Image();
       img.src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       img.onerror = function() {
         document.getElementById("mainImg").src = "img/Noimage_image.png";
+        document.getElementById("mainImg_large").src = "img/Noimage_image.png";
       }
       document.getElementById("mainImg").style.display = "block";
     }
@@ -448,7 +450,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tr>
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer">
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
             <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
           </a>
         </td>
