@@ -563,9 +563,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
         for ($i = 0; $i < 10; $i++) {
           if ($min == 0) {
-            $d_min = $m0 . $i;
+            $min = $m0 . $i;
           } else {
-            $d_min = $min + $i;
+            $min = $min + $i;
           }
 
           // file_existsで検索する場合はIPアドレスから指定してあげる。
@@ -575,14 +575,14 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
           //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
           // }
-          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
-            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
+          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $min . "00_mini.jpg")) {
+            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $min . "00_mini.jpg";
           }
 
         ?>
           <td width="10%" algin="center" style="text-align:center;">
-            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
-            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
+            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min); ?><br />
+            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $min . "00"; ?>');">
           </td>
         <?php } ?>
       </tr>
