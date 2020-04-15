@@ -36,7 +36,7 @@
     padding-top: 140px;
     background: url("../img/load.gif") center center no-repeat;
   }
-
+/* 
   @media only screen and (max-width: 800px){
     table{
       width: 100%;
@@ -62,4 +62,4 @@
     table tbody tr {
       width: 30%;
     }
-  }
+  } */
