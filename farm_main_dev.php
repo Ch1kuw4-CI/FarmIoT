@@ -562,7 +562,12 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         }
 
         for ($i = 0; $i < 10; $i++) {
-          $d_min = $min + $i;
+          if ($min = 0) {
+            $d_min = $m0 . $i;
+          } else {
+            $d_min = $min + $i;
+          }
+
           // file_existsで検索する場合はIPアドレスから指定してあげる。
           // それ以外はエイリアスのパスで指定する
           $subImg = "img/Noimage_image.png";
