@@ -21,14 +21,6 @@ if (isset($_POST['login'])) {
     } else {
         $message = 'IDかPWが間違っています。';
     }
-
-    // if ($_POST['id'] == 'kurozemu' && $_POST['password'] == 'miura0313') {
-    //     $_SESSION["USER"] = 'kurozemu';
-    //     header("Location: farm_graph.php");
-    //     exit;
-    // } else {
-    //     $message = 'IDかPWが間違っています。';
-    // }
 }
 
 ?>
