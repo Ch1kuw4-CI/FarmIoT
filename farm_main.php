@@ -187,10 +187,12 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     function viewImage($timeStr) {
       $times = $timeStr.toString();
       document.getElementById("mainImg").src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
+      document.getElementById("mainImg_large").href = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       var img = new Image();
       img.src = "<?php echo "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_"; ?>" + $times + ".jpg";
       img.onerror = function() {
         document.getElementById("mainImg").src = "img/Noimage_image.png";
+        document.getElementById("mainImg_large").href = "img/Noimage_image.png";
       }
       document.getElementById("mainImg").style.display = "block";
     }
@@ -404,24 +406,29 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 </head>
 
 <body>
-  <div style="background-color:#FFF;height: 100px;">
-    <table borde=0 width="100%">
+  <div style="background-color:#FFF;height: 40px;">
+    <table>
       <td>
         <form action="farm_main.php" method="post" name="aForm">
-          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
           <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
           <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
         </form>
       </td>
     </table>
-    <hr>
-
+  </div>
+  <hr>
+  <div>
     <form method='POST' action='farm_main.php'>
-      <select name='camera'>
-        <?php
-        echo $camera_data; ?>
-      </select>
-      <input type='submit' value='送信' />
+      <table>
+        <td>
+          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+          <select name='camera'>
+            <?php
+            echo $camera_data; ?>
+          </select>
+          <input type='submit' value='送信' />
+        </td>
+      </table>
     </form>
     <hr>
 
@@ -434,7 +441,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tr>
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image">
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
             <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
           </a>
         </td>
@@ -546,19 +553,27 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         }
 
         for ($i = 0; $i < 10; $i++) {
+          if ($min == 0) {
+            $d_min = $m0 . $i;
+          } else {
+            $d_min = $min + $i;
+          }
 
           // file_existsで検索する場合はIPアドレスから指定してあげる。
           // それ以外はエイリアスのパスで指定する
           $subImg = "img/Noimage_image.png";
           // カメラ毎の画像フォルダを参照するように修正
-          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
-            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
+          // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
+          //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
+          // }
+          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
+            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
           }
 
         ?>
           <td width="10%" algin="center" style="text-align:center;">
             <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
-            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $m0 . $i . "00"; ?>');">
+            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
           </td>
         <?php } ?>
       </tr>
