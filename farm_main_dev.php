@@ -564,7 +564,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </tr>
       </table>
     </form>
-    <table width="100%" align="center">
+    <table width="30%" align="center">
       <tr>
         <td>
           <!-- ↓ダウンロードボタンを表示する場所を確保 -->
