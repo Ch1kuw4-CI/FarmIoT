@@ -437,221 +437,217 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 </head>
 
 <body>
-  <div class="wrap">
-    <div style=" background-color:#FFF;height: 40px;">
+  <div style=" background-color:#FFF;height: 40px;">
+    <table>
+      <td>
+        <form action="farm_main_dev.php" method="post" name="aForm">
+          <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
+          <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
+        </form>
+      </td>
+    </table>
+  </div>
+  <hr>
+  <div>
+    <form method='POST' action='farm_main_dev.php'>
       <table>
         <td>
-          <form action="farm_main_dev.php" method="post" name="aForm">
-            <input type="button" value="　撮影画像　" onClick="goImage();"><input type="button" value="　グラフ　" onClick="onGraph();">
-            <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
-          </form>
+          <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
+          <select name='camera'>
+            <?php
+            echo $camera_data; ?>
+          </select>
+          <input type='submit' value='送信' />
         </td>
       </table>
-    </div>
+    </form>
     <hr>
-    <div>
-      <form method='POST' action='farm_main_dev.php'>
-        <table>
-          <td>
-            <input type="text" name="date" class="xxdate" readonly="readonly" value="<?php echo $org_date; ?>">
-            <select name='camera'>
-              <?php
-              echo $camera_data; ?>
-            </select>
-            <input type='submit' value='送信' />
-          </td>
-        </table>
-      </form>
-      <hr>
 
-      <?php echo substr($dateStr, 0, 4); ?>/<?php echo substr($dateStr, 4, 2); ?>/<?php echo substr($dateStr, 6, 2); ?>
+    <?php echo substr($dateStr, 0, 4); ?>/<?php echo substr($dateStr, 4, 2); ?>/<?php echo substr($dateStr, 6, 2); ?>
 
-      <br>
-    </div>
-    <div style="padding:20px 0px 0px 0px;">
-      <table width="100%">
-        <tr>
-          <td algin="center" style="text-align:center;">
-            <!-- ここに大きな画像を出力する -->
-            <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
-              <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
-            </a>
-          </td>
-        </tr>
-      </table>
+    <br>
+  </div>
+  <div style="padding:20px 0px 0px 0px;">
+    <table width="100%">
+      <tr>
+        <td algin="center" style="text-align:center;">
+          <!-- ここに大きな画像を出力する -->
+          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
+            <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
+          </a>
+        </td>
+      </tr>
+    </table>
 
-      <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
-        <table align="center">
-          <tr>
-            <th>開始日</th>
-            <td>
-              <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
-            </td>
-            <th>終了日</th>
-            <td>
-              <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
-            </td>
-            <th>表示速度</th>
-            <td>
-              <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
-            </td>
-          </tr>
-          <tr>
-            <th>開始時間</th>
-            <td>
-              <select name="start_time" id="start_time" style="width: 80px;">
-                <option value="00" selected=select>00:00</option>
-                <option value="01">01:00</option>
-                <option value="02">02:00</option>
-                <option value="03">03:00</option>
-                <option value="04">04:00</option>
-                <option value="05">05:00</option>
-                <option value="06">06:00</option>
-                <option value="07">07:00</option>
-                <option value="08">08:00</option>
-                <option value="09">09:00</option>
-                <option value="10">10:00</option>
-                <option value="11">11:00</option>
-                <option value="12">12:00</option>
-                <option value="13">13:00</option>
-                <option value="14">14:00</option>
-                <option value="15">15:00</option>
-                <option value="16">16:00</option>
-                <option value="17">17:00</option>
-                <option value="18">18:00</option>
-                <option value="19">19:00</option>
-                <option value="20">20:00</option>
-                <option value="21">21:00</option>
-                <option value="22">22:00</option>
-                <option value="23">23:00</option>
-                <option value="24">24:00</option>
-              </select>
-            </td>
-            <th>終了時間</th>
-            <td>
-              <select name="end_time" id="end_time" style="width: 80px;">
-                <option value="00">00:00</option>
-                <option value="01" selected=select>01:00</option>
-                <option value="02">02:00</option>
-                <option value="03">03:00</option>
-                <option value="04">04:00</option>
-                <option value="05">05:00</option>
-                <option value="06">06:00</option>
-                <option value="07">07:00</option>
-                <option value="08">08:00</option>
-                <option value="09">09:00</option>
-                <option value="10">10:00</option>
-                <option value="11">11:00</option>
-                <option value="12">12:00</option>
-                <option value="13">13:00</option>
-                <option value="14">14:00</option>
-                <option value="15">15:00</option>
-                <option value="16">16:00</option>
-                <option value="17">17:00</option>
-                <option value="18">18:00</option>
-                <option value="19">19:00</option>
-                <option value="20">20:00</option>
-                <option value="21">21:00</option>
-                <option value="22">22:00</option>
-                <option value="23">23:00</option>
-                <option value="24">24:00</option>
-              </select>
-            </td>
-            <th>結合開始</th>
-            <td>
-              <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
-              <input type="button" value="結合開始" onclick="image_merge()">
-            </td>
-          </tr>
-        </table>
-      </form>
+    <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
       <table align="center">
         <tr>
+          <th>開始日</th>
           <td>
-            <!-- ↓ダウンロードボタンを表示する場所を確保 -->
-            <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
-            <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
+            <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
+          </td>
+          <th>終了日</th>
+          <td>
+            <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
+          </td>
+          <th>表示速度</th>
+          <td>
+            <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
+          </td>
+        </tr>
+        <tr>
+          <th>開始時間</th>
+          <td>
+            <select name="start_time" id="start_time" style="width: 80px;">
+              <option value="00" selected=select>00:00</option>
+              <option value="01">01:00</option>
+              <option value="02">02:00</option>
+              <option value="03">03:00</option>
+              <option value="04">04:00</option>
+              <option value="05">05:00</option>
+              <option value="06">06:00</option>
+              <option value="07">07:00</option>
+              <option value="08">08:00</option>
+              <option value="09">09:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+              <option value="17">17:00</option>
+              <option value="18">18:00</option>
+              <option value="19">19:00</option>
+              <option value="20">20:00</option>
+              <option value="21">21:00</option>
+              <option value="22">22:00</option>
+              <option value="23">23:00</option>
+              <option value="24">24:00</option>
+            </select>
+          </td>
+          <th>終了時間</th>
+          <td>
+            <select name="end_time" id="end_time" style="width: 80px;">
+              <option value="00">00:00</option>
+              <option value="01" selected=select>01:00</option>
+              <option value="02">02:00</option>
+              <option value="03">03:00</option>
+              <option value="04">04:00</option>
+              <option value="05">05:00</option>
+              <option value="06">06:00</option>
+              <option value="07">07:00</option>
+              <option value="08">08:00</option>
+              <option value="09">09:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+              <option value="17">17:00</option>
+              <option value="18">18:00</option>
+              <option value="19">19:00</option>
+              <option value="20">20:00</option>
+              <option value="21">21:00</option>
+              <option value="22">22:00</option>
+              <option value="23">23:00</option>
+              <option value="24">24:00</option>
+            </select>
+          </td>
+          <th>結合開始</th>
+          <td>
+            <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
+            <input type="button" value="結合開始" onclick="image_merge()">
           </td>
         </tr>
       </table>
-      <table width="100%">
-        <tr>
-          <?php
-          $hh = substr($timeStr, 0, 2);
-          $m0 = substr($timeStr, 2, 1);
-          $min = substr($timeStr, 2, 2);
-          if ($min > 50) {
-            $min = 50;
+    </form>
+    <table align="center">
+      <tr>
+        <td>
+          <!-- ↓ダウンロードボタンを表示する場所を確保 -->
+          <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
+          <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
+        </td>
+      </tr>
+    </table>
+    <table width="100%">
+      <tr>
+        <?php
+        $hh = substr($timeStr, 0, 2);
+        $m0 = substr($timeStr, 2, 1);
+        $min = substr($timeStr, 2, 2);
+        if ($min > 50) {
+          $min = 50;
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+          if ($min == 0) {
+            $d_min = $m0 . $i;
+          } else {
+            $d_min = $min + $i;
           }
 
-          for ($i = 0; $i < 10; $i++) {
-            if ($min == 0) {
-              $d_min = $m0 . $i;
-            } else {
-              $d_min = $min + $i;
-            }
+          // file_existsで検索する場合はIPアドレスから指定してあげる。
+          // それ以外はエイリアスのパスで指定する
+          $subImg = "img/Noimage_image.png";
+          // カメラ毎の画像フォルダを参照するように修正
+          // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
+          //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
+          // }
+          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
+            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
+          }
 
-            // file_existsで検索する場合はIPアドレスから指定してあげる。
-            // それ以外はエイリアスのパスで指定する
-            $subImg = "img/Noimage_image.png";
-            // カメラ毎の画像フォルダを参照するように修正
-            // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
-            //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
-            // }
-            if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
-              $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
-            }
+        ?>
+          <td width="10%" algin="center" style="text-align:center;">
+            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
+            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
+          </td>
+        <?php } ?>
+      </tr>
+    </table>
 
-          ?>
-            <td width="10%" algin="center" style="text-align:center;">
-              <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
-              <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
-            </td>
-          <?php } ?>
+    <div style="text-align:center;width:100%;height:200px;">
+      <table style="margin-left:auto;margin-right:auto;">
+        <!--追加部分-->
+        <tr>
+          <td></td>
+          <td>00分</td>
+          <td>10分</td>
+          <td>20分</td>
+          <td>30分</td>
+          <td>40分</td>
+          <td>50分</td>
         </tr>
-      </table>
-
-      <div style="text-align:center;width:100%;height:200px;">
-        <table style="margin-left:auto;margin-right:auto;">
-          <!--追加部分-->
+        <!--追加部分-->
+        <?php for ($i = 0; $i < 24; $i++) { ?>
           <tr>
-            <td></td>
-            <td>00分</td>
-            <td>10分</td>
-            <td>20分</td>
-            <td>30分</td>
-            <td>40分</td>
-            <td>50分</td>
+            <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
+            <?php
+            $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
+            for ($j = 0; $j < 6; $j++) {
+              $m0 = $j;
+
+              // file_existsで検索する場合はIPアドレスから指定してあげる。
+              // それ以外はエイリアスのパスで指定する
+              $subImg = "img/Noimage_image.png";
+              if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
+                $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
+              }
+            ?>
+              <td>
+                <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
+                  <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
+                </a>
+              </td>
+            <?php } ?>
           </tr>
-          <!--追加部分-->
-          <?php for ($i = 0; $i < 24; $i++) { ?>
-            <tr>
-              <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
-              <?php
-              $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
-              for ($j = 0; $j < 6; $j++) {
-                $m0 = $j;
-
-                // file_existsで検索する場合はIPアドレスから指定してあげる。
-                // それ以外はエイリアスのパスで指定する
-                $subImg = "img/Noimage_image.png";
-                if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
-                  $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
-                }
-              ?>
-                <td>
-                  <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
-                    <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
-                  </a>
-                </td>
-              <?php } ?>
-            </tr>
-          <?php } ?>
-        </table>
-      </div>
-
+        <?php } ?>
+      </table>
     </div>
-    <!-- /.wrap -->
   </div>
   <script src="js/lightbox.js"></script>
 </body>
