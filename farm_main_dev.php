@@ -171,9 +171,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
   <meta http-equiv="Refresh" content="300" name="refTime">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"> -->
   <title>開発用テスト画面_撮影画像</title>
-  <!-- <meta name="viewport" content="width=device-width"> -->
+  <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" href="css/main.css" />
   <link href="css/lightbox.css" rel="stylesheet" />
@@ -564,7 +564,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </tr>
       </table>
     </form>
-    <table width="30%" align="center">
+    <table align="center">
       <tr>
         <td>
           <!-- ↓ダウンロードボタンを表示する場所を確保 -->
