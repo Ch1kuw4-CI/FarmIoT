@@ -408,9 +408,9 @@ $mysqli->close();
           labelString: "電気伝導度EC(mS/cm)"
         },
         ticks: {
-          max: 1.0, //<?php echo $max[2] + 10; ?>,
-          min: 0, //<?php echo $min[2] - 10; ?>,
-          stepSize: 0.1
+          max: 2.0, //<?php echo $max[2] + 10; ?>,
+          min: 0.0, //<?php echo $min[2] - 10; ?>,
+          stepSize: 0.2
         },
         gridLines: {
           drawOnChartArea: false,
