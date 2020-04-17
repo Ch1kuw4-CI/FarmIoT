@@ -170,10 +170,10 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
-  <meta http-equiv="Refresh" content="300">
+  <meta http-equiv="Refresh" content="300" name="refTime">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
   <title>開発用テスト画面_撮影画像</title>
-  <meta name="viewport" content="width=device-width">
+  <!-- <meta name="viewport" content="width=device-width"> -->
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" href="css/main.css" />
   <link href="css/lightbox.css" rel="stylesheet" />
@@ -285,6 +285,23 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     function image_merge() {
       dispLoading("結合処理中...");
 
+      //meta情報を取得して、リフレッシュを書き換え
+      var metaDiscre = document.head.children;
+      var metaLength = metaDiscre.length;
+      for (var i = 0; i < metaLength; i++) {
+        // metaタグをすべてループ
+        var proper = metaDiscre[i].getAttribute('name');
+        if (proper === 'refTime') {
+          //metaの名前がrefTimeの場合(リフレッシュのmeta)、書き換え処理
+          var ref = metaDiscre[i];
+          //contentに指定しているリフレッシュ秒数を空にする
+          ref.setAttribute('content', '""');
+          console.log(dis);
+        }
+      }
+
+
+
       var now = new Date();
       var n_year = now.getFullYear();
       var n_mon = now.getMonth() + 1
@@ -327,48 +344,50 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         return;
       }
 
-      // 画像結合処理のURLを変数に格納
-      serv_url = "http://160.16.239.88/farm/img_merge.php"
-      // 画像連結処理のウィンドウを開く
-      window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
+      // // 画像結合処理のURLを変数に格納
+      // serv_url = "http://160.16.239.88/farm/img_merge.php"
+      // // 画像連結処理のウィンドウを開く
+      // window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
 
-      //テストてきにいったんウィンドウが開いたらローディング画像を削除する
-      removeLoading();
+      // //テストてきにいったんウィンドウが開いたらローディング画像を削除する
+      // removeLoading();
 
       // 非同期処理
-      // $.ajax({
-      //     url: 'img_merge.php',
-      //     method: 'POST',
-      //     timeout: 300000,
-      //     data: {
-      //       start_date: s_date,
-      //       end_date: e_date,
-      //       start_time: s_time,
-      //       end_time: e_time,
-      //       disp_speed: d_speed,
-      // camera: '<?php echo $camera_id ?>'
+      $.ajax({
+          url: 'img_merge.php',
+          method: 'POST',
+          timeout: 300000,
+          data: {
+            start_date: s_date,
+            end_date: e_date,
+            start_time: s_time,
+            end_time: e_time,
+            disp_speed: d_speed,
+            camera: '<?php echo $camera_id ?>'
 
-      //     }
-      //   })
-      //   //通信成功時
-      //   .done(function(data) {
-      //     f_name = '/var/www/html/farm/images/dl/' + s_date + "_" + s_time + "00-" + e_date + "_" + e_time + "00_cam" + <?php echo $camera_id ?> + ".mp4";
-      //     alert('静止画データの結合に成功しました');
-      //   })
-      //   //失敗時
-      //   .fail(function(jqXHR, textStatus, errorThrown) {
-      //     // 通信失敗時の処理
-      //     alert('ファイルの取得に失敗しました。');
-      //     console.log("ajax通信に失敗しました");
-      //     console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
-      //     console.log("textStatus     : " + textStatus); // タイムアウト、パースエラー
-      //     console.log("errorThrown    : " + errorThrown.message); // 例外情報
-      //   })
-      //   //処理終了時
-      //   .always(function(data) {
-      //     //Loading画像を消す
-      //     removeLoading();
-      //   });
+          }
+        })
+        //通信成功時
+        .done(function(data) {
+          f_name = '/var/www/html/farm/images/dl/' + s_date + "_" + s_time + "00-" + e_date + "_" + e_time + "00_cam" + <?php echo $camera_id ?> + ".mp4";
+          alert('静止画データの結合に成功しました');
+        })
+        //失敗時
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          // 通信失敗時の処理
+          alert('ファイルの取得に失敗しました。');
+          console.log("ajax通信に失敗しました");
+          console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
+          console.log("textStatus     : " + textStatus); // タイムアウト、パースエラー
+          console.log("errorThrown    : " + errorThrown.message); // 例外情報
+        })
+        //処理終了時
+        .always(function(data) {
+          //Loading画像を消す
+          removeLoading();
+          //contentの再設定
+          ref.setAttribute('content', '300');
+        });
     }
 
     var playButton = function() {
@@ -542,7 +561,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </tr>
       </table>
     </form>
-    <table widht="30%" align="center">
+    <table width="100%" align="center">
       <tr>
         <td>
           <!-- ↓ダウンロードボタンを表示する場所を確保 -->
