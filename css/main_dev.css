@@ -72,3 +72,8 @@
   @media screen and (min-width:781px){
     /*画面幅が781px以上のとき*/
   }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    }
