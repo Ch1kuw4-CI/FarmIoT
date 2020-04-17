@@ -282,6 +282,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
      */
     var f_name = "";
 
+    /**
+     * 画像結合処理を呼び出す非同期処理
+     */
     function image_merge() {
       dispLoading("結合処理中...");
 
@@ -295,12 +298,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           //metaの名前がrefTimeの場合(リフレッシュのmeta)、書き換え処理
           var ref = metaDiscre[i];
           //contentに指定しているリフレッシュ秒数を空にする
-          ref.setAttribute('content', '""');
-          console.log(dis);
+          ref.setAttribute('content', '');
         }
       }
-
-
 
       var now = new Date();
       var n_year = now.getFullYear();
@@ -312,6 +312,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       // 現在の日付を取得
       var n_today = n_year.toString() + n_mon.toString() + n_date.toString();
 
+      //入力された各種値の取得
       var s_date = document.getElementById("startdate").value;
       var e_date = document.getElementById("enddate").value;
       var s_time = $("#start_time").val();
@@ -364,7 +365,6 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
             end_time: e_time,
             disp_speed: d_speed,
             camera: '<?php echo $camera_id ?>'
-
           }
         })
         //通信成功時
@@ -390,6 +390,9 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         });
     }
 
+    /**
+     * 各種ボタンの切り替え処理
+     */
     var playButton = function() {
       $.ajax('cmdbox.php', {
           type: 'get',
