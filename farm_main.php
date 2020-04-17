@@ -170,7 +170,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
-  <meta http-equiv="Refresh" content="300">
+  <meta http-equiv="Refresh" content="300" name="refTime">
   <title>撮影画像</title>
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
@@ -281,8 +281,25 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
      */
     var f_name = "";
 
+    /**
+     * 画像結合処理を呼び出す非同期処理
+     */
     function image_merge() {
       dispLoading("結合処理中...");
+
+      //meta情報を取得して、リフレッシュを書き換え
+      var metaDiscre = document.head.children;
+      var metaLength = metaDiscre.length;
+      for (var i = 0; i < metaLength; i++) {
+        // metaタグをすべてループ
+        var proper = metaDiscre[i].getAttribute('name');
+        if (proper === 'refTime') {
+          //metaの名前がrefTimeの場合(リフレッシュのmeta)、書き換え処理
+          var ref = metaDiscre[i];
+          //contentに指定しているリフレッシュ秒数を空にする
+          ref.setAttribute('content', '');
+        }
+      }
 
       var now = new Date();
       var n_year = now.getFullYear();
@@ -294,6 +311,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       // 現在の日付を取得
       var n_today = n_year.toString() + n_mon.toString() + n_date.toString();
 
+      //入力された各種値の取得
       var s_date = document.getElementById("startdate").value;
       var e_date = document.getElementById("enddate").value;
       var s_time = $("#start_time").val();
@@ -338,7 +356,6 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
             end_time: e_time,
             disp_speed: d_speed,
             camera: '<?php echo $camera_id ?>'
-
           }
         })
         //通信成功時
@@ -359,9 +376,14 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         .always(function(data) {
           //Loading画像を消す
           removeLoading();
+          //contentの再設定
+          ref.setAttribute('content', '300');
         });
     }
 
+    /**
+     * 各種ボタンの切り替え処理
+     */
     var playButton = function() {
       $.ajax('cmdbox.php', {
           type: 'get',
