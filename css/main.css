@@ -36,9 +36,10 @@
     padding-top: 140px;
     background: url("../img/load.gif") center center no-repeat;
   }
-/* 
-  @media only screen and (max-width: 800px){
-    table{
+
+  /* @media only screen and (max-width: 800px){
+    /* 画面幅が800pxまでのときに反映されるCSS */
+ /*   table{
       width: 100%;
     }
     table tr {
@@ -63,3 +64,7 @@
       width: 30%;
     }
   } */
+
+  @media screen and (min-width:781px){
+    /*画面幅が781px以上のとき*/
+  }
