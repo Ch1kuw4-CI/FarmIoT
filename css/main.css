@@ -37,6 +37,10 @@
     background: url("../img/load.gif") center center no-repeat;
   }
 
+  .wrap {
+    overflow: hidden;
+  }
+
   /* @media only screen and (max-width: 800px){
     /* 画面幅が800pxまでのときに反映されるCSS */
  /*   table{
