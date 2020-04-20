@@ -75,9 +75,14 @@
 
   #mainImg {
     max-width: 100%;
-    /* height: auto; */
+    height: auto;
     }
 
   .mini-table {
     width: 100%;
   }
+
+  #miniImg {
+    max-width: 100%;
+    height: auto;
+    }
