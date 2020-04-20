@@ -575,40 +575,41 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </table>
   </div>
   <div>
-    <tr>
-      <?php
-      $hh = substr($timeStr, 0, 2);
-      $m0 = substr($timeStr, 2, 1);
-      $min = substr($timeStr, 2, 2);
-      if ($min > 50) {
-        $min = 50;
-      }
-
-      for ($i = 0; $i < 10; $i++) {
-        if ($min == 0) {
-          $d_min = $m0 . $i;
-        } else {
-          $d_min = $min + $i;
+    <table class="mini-table">
+      <tr>
+        <?php
+        $hh = substr($timeStr, 0, 2);
+        $m0 = substr($timeStr, 2, 1);
+        $min = substr($timeStr, 2, 2);
+        if ($min > 50) {
+          $min = 50;
         }
 
-        // file_existsで検索する場合はIPアドレスから指定してあげる。
-        // それ以外はエイリアスのパスで指定する
-        $subImg = "img/Noimage_image.png";
-        // カメラ毎の画像フォルダを参照するように修正
-        // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
-        //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
-        // }
-        if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
-          $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
-        }
+        for ($i = 0; $i < 10; $i++) {
+          if ($min == 0) {
+            $d_min = $m0 . $i;
+          } else {
+            $d_min = $min + $i;
+          }
 
-      ?>
-        <td width="10%" algin="center" style="text-align:center;">
-          <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
-          <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
-        </td>
-      <?php } ?>
-    </tr>
+          // file_existsで検索する場合はIPアドレスから指定してあげる。
+          // それ以外はエイリアスのパスで指定する
+          $subImg = "img/Noimage_image.png";
+          // カメラ毎の画像フォルダを参照するように修正
+          // if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg")) {
+          //   $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . $i . "00_mini.jpg";
+          // }
+          if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg")) {
+            $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $d_min . "00_mini.jpg";
+          }
+
+        ?>
+          <td width="10%" algin="center" style="text-align:center;">
+            <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
+            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
+          </td>
+        <?php } ?>
+      </tr>
     </table>
 
     <div style="text-align:center;width:100%;height:200px;">

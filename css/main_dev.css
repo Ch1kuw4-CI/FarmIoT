@@ -73,7 +73,7 @@
     /*画面幅が781px以上のとき*/
   }
 
-  img {
+  #mainImg {
     max-width: 100%;
     /* height: auto; */
     }
