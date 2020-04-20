@@ -41,10 +41,10 @@
     overflow: hidden;
   }
 
-  /* @media only screen and (max-width: 800px){
+  /* @media only screen and (max-width: 800px){ */
     /* 画面幅が800pxまでのときに反映されるCSS */
- /*   table{
-      width: 100%;
+   /* table{
+      width: auto;
     }
     table tr {
       display: block;
@@ -57,7 +57,7 @@
       display: block;
     }
     table thead tr {
-      width: 100%;
+      width: auto;
     }
     table tbody{
       display: block;
@@ -72,3 +72,8 @@
   @media screen and (min-width:781px){
     /*画面幅が781px以上のとき*/
   }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    }
