@@ -177,11 +177,15 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" href="css/main_dev.css" />
   <link href="css/lightbox.css" rel="stylesheet" />
+  <!-- BootstrapのCSS読み込み -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/jquery.ui.core.min.js"></script>
   <script src="js/jquery.ui.datepicker.min.js"></script>
   <script src="js/jquery.ui.datepicker-ja.min.js"></script>
+  <!-- BootstrapのJS読み込み -->
+  <script src="js/bootstrap.min.js"></script>
 
   <script>
     // サムネイル表示関数

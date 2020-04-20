@@ -69,14 +69,6 @@
     }
   } */
 
-  @media screen and (min-width:781px){
-    /*画面幅が781px以上のとき*/
-    .miniImg{
-      width: 85px;
-      height: 48px;
-    }
-  }
-
   .mainImg {
     max-width: 100%;
     height: auto;
@@ -89,4 +81,12 @@
   .miniImg {
     max-width: 100%;
     /* height: auto; */
+  }
+
+  @media screen and (min-width:781px){
+    /*画面幅が781px以上のとき*/
+    .miniImg{
+      width: 85px;
+      height: 48px;
+    }
   }
