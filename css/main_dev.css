@@ -82,7 +82,7 @@
     width: 100%;
   }
 
-  #miniImg {
+  .miniImg {
     max-width: 100%;
     height: auto;
     }
