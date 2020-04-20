@@ -573,7 +573,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </td>
       </tr>
     </table>
-    <table width="100%">
+    <table class="mini-table">
       <tr>
         <?php
         $hh = substr($timeStr, 0, 2);
