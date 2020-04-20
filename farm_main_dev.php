@@ -473,7 +473,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         <td algin="center" style="text-align:center;">
           <!-- ここに大きな画像を出力する -->
           <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
-            <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
+            <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg" class="mainImg">
           </a>
         </td>
       </tr>
