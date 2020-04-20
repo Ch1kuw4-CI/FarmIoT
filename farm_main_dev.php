@@ -573,6 +573,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </td>
       </tr>
     </table>
+  </div>
+  <div>
     <table class="mini-table">
       <tr>
         <?php
