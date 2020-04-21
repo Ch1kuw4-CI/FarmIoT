@@ -578,8 +578,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       </tr>
     </table>
   </div>
-  <div>
-    <table class="mini-table">
+  <div class="col-12 ml-2">
+    <table class="mini-table table table-borderd">
       <tr>
         <?php
         $hh = substr($timeStr, 0, 2);
@@ -615,45 +615,45 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         <?php } ?>
       </tr>
     </table>
+  </div>
 
-    <div style="text-align:center;width:100%;height:200px;">
-      <table style="margin-left:auto;margin-right:auto;">
-        <!--追加部分-->
+  <div style="text-align:center;width:100%;">
+    <table class="table table-borderd" style="margin-left:auto;margin-right:auto;">
+      <!--追加部分-->
+      <tr>
+        <td></td>
+        <td>00分</td>
+        <td>10分</td>
+        <td>20分</td>
+        <td>30分</td>
+        <td>40分</td>
+        <td>50分</td>
+      </tr>
+      <!--追加部分-->
+      <?php for ($i = 0; $i < 24; $i++) { ?>
         <tr>
-          <td></td>
-          <td>00分</td>
-          <td>10分</td>
-          <td>20分</td>
-          <td>30分</td>
-          <td>40分</td>
-          <td>50分</td>
-        </tr>
-        <!--追加部分-->
-        <?php for ($i = 0; $i < 24; $i++) { ?>
-          <tr>
-            <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
-            <?php
-            $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
-            for ($j = 0; $j < 6; $j++) {
-              $m0 = $j;
+          <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
+          <?php
+          $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
+          for ($j = 0; $j < 6; $j++) {
+            $m0 = $j;
 
-              // file_existsで検索する場合はIPアドレスから指定してあげる。
-              // それ以外はエイリアスのパスで指定する
-              $subImg = "img/Noimage_image.png";
-              if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
-                $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
-              }
-            ?>
-              <td>
-                <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
-                  <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
-                </a>
-              </td>
-            <?php } ?>
-          </tr>
-        <?php } ?>
-      </table>
-    </div>
+            // file_existsで検索する場合はIPアドレスから指定してあげる。
+            // それ以外はエイリアスのパスで指定する
+            $subImg = "img/Noimage_image.png";
+            if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
+              $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
+            }
+          ?>
+            <td>
+              <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
+                <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
+              </a>
+            </td>
+          <?php } ?>
+        </tr>
+      <?php } ?>
+    </table>
   </div>
   <script src="js/lightbox.js"></script>
 </body>
