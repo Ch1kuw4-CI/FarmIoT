@@ -579,7 +579,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </table>
   </div>
   <div class="col-12 ml-2">
-    <table class="mini-table table table-borderd">
+    <table class="mini-table table table-bordered">
       <tr>
         <?php
         $hh = substr($timeStr, 0, 2);
@@ -618,7 +618,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
   </div>
 
   <div style="text-align:center;width:100%;">
-    <table class="table table-borderd" style="margin-left:auto;margin-right:auto;">
+    <table class="table table-bordered" style="margin-left:auto;margin-right:auto;">
       <!--追加部分-->
       <tr>
         <td></td>
