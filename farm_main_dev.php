@@ -647,7 +647,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           ?>
             <td>
               <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
-                <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
+                <img class="img-thumbnail" src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
               </a>
             </td>
           <?php } ?>
