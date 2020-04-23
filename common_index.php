@@ -39,27 +39,13 @@ if (isset($_POST['login'])) {
     <div id="login">
         <form name='form-login' method="post" action="common_index.php">
             <span class="fontawesome-user"></span>
-            <input type="text" id="user" placeholder="Username">
+            <input type="text" id="user" name="user" placeholder="Username">
 
             <span class="fontawesome-lock"></span>
-            <input type="password" id="pass" placeholder="Password">
+            <input type="password" id="pass" name="pass" placeholder="Password">
 
             <input type="submit" name="login" value="Login">
     </div>
-
-    <!-- <h1>ログイン</h1>
-    <p style="color: red"><?php //echo $message 
-                            ?></p>
-    <form method="post" action="index.php">
-        <label for="email">ユーザーID</label>
-        <input id="id" type="id" name="id">
-        <br>
-        <label for="password">パスワード</label>
-        <input id="password" type="password" name="password">
-        <br>
-        <input type="submit" name="login" value="ログイン">
-    </form> -->
-
 </body>
 
 </html>
