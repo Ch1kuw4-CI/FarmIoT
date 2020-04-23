@@ -37,9 +37,9 @@
     background: url("../img/load.gif") center center no-repeat;
   }
 
-  .wrap {
+  /* .wrap {
     overflow: hidden;
-  }
+  } */
 
   /* @media only screen and (max-width: 800px){ */
     /* 画面幅が800pxまでのときに反映されるCSS */
@@ -69,15 +69,24 @@
     }
   } */
 
-  @media screen and (min-width:781px){
-    /*画面幅が781px以上のとき*/
-  }
-
-  img {
+  .mainImg {
     max-width: 100%;
     height: auto;
-    }
+  }
 
-  table.mini-table{
+  .mini-table {
     width: 100%;
+  }
+
+  .miniImg {
+    max-width: 100%;
+    /* height: auto; */
+  }
+
+  @media screen and (min-width:781px){
+    /*画面幅が781px以上のとき*/
+    .miniImg{
+      width: 85px;
+      height: 48px;
+    }
   }
