@@ -471,7 +471,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
     <br>
   </div>
-  <div style="padding:20px 0px 0px 0px; width: 100%;">
+  <div class="center-block">
     <table width="100%">
       <tr>
         <td algin="center" style="text-align:center;">
@@ -579,7 +579,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </table>
   </div>
   <div class="col-12 mx-2">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
       <tr>
         <?php
         $hh = substr($timeStr, 0, 2);
@@ -608,7 +608,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           }
 
         ?>
-          <td width="10%" algin="center" style="text-align:center;">
+          <!-- <td width="10%" algin="center" style="text-align:center;"> -->
+          <td algin="center" style="text-align:center;">
             <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
             <img class="miniImg" src="<?php echo $subImg; ?>" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
           </td>
