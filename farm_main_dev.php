@@ -589,7 +589,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </tr>
   </table>
   </div>
-  <div class="col-md-10 offset-md-1">
+  <div class="col-md-9 offset-md-2">
     <table class="table table-bordered table-responsive">
       <tr>
         <?php
