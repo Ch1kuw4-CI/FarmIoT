@@ -471,17 +471,21 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
     <br>
   </div>
-  <div class="center-block">
-    <table width="100%">
-      <tr>
-        <td algin="center" style="text-align:center;">
-          <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
-            <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg" class="mainImg">
-          </a>
-        </td>
-      </tr>
-    </table>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">col-md-10 col-md-offset-1
+        <table width="100%">
+          <tr>
+            <td algin="center" style="text-align:center;">
+              <!-- ここに大きな画像を出力する -->
+              <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
+                <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg" class="mainImg">
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
 
     <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
       <table align="center">
