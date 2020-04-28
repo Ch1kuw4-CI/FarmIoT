@@ -473,7 +473,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
   </div>
   <div class="container">
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">col-md-10 col-md-offset-1
+      <div class="col-md-10 col-md-offset-1">
         <table width="100%">
           <tr>
             <td algin="center" style="text-align:center;">
@@ -486,101 +486,102 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         </table>
       </div>
     </div>
+  </div>
 
-    <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
-      <table align="center">
-        <tr>
-          <th>開始日</th>
-          <td>
-            <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
-          </td>
-          <th>終了日</th>
-          <td>
-            <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
-          </td>
-          <th>表示速度</th>
-          <td>
-            <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
-          </td>
-        </tr>
-        <tr>
-          <th>開始時間</th>
-          <td>
-            <select name="start_time" id="start_time" style="width: 80px;">
-              <option value="00" selected=select>00:00</option>
-              <option value="01">01:00</option>
-              <option value="02">02:00</option>
-              <option value="03">03:00</option>
-              <option value="04">04:00</option>
-              <option value="05">05:00</option>
-              <option value="06">06:00</option>
-              <option value="07">07:00</option>
-              <option value="08">08:00</option>
-              <option value="09">09:00</option>
-              <option value="10">10:00</option>
-              <option value="11">11:00</option>
-              <option value="12">12:00</option>
-              <option value="13">13:00</option>
-              <option value="14">14:00</option>
-              <option value="15">15:00</option>
-              <option value="16">16:00</option>
-              <option value="17">17:00</option>
-              <option value="18">18:00</option>
-              <option value="19">19:00</option>
-              <option value="20">20:00</option>
-              <option value="21">21:00</option>
-              <option value="22">22:00</option>
-              <option value="23">23:00</option>
-              <option value="24">24:00</option>
-            </select>
-          </td>
-          <th>終了時間</th>
-          <td>
-            <select name="end_time" id="end_time" style="width: 80px;">
-              <option value="00">00:00</option>
-              <option value="01" selected=select>01:00</option>
-              <option value="02">02:00</option>
-              <option value="03">03:00</option>
-              <option value="04">04:00</option>
-              <option value="05">05:00</option>
-              <option value="06">06:00</option>
-              <option value="07">07:00</option>
-              <option value="08">08:00</option>
-              <option value="09">09:00</option>
-              <option value="10">10:00</option>
-              <option value="11">11:00</option>
-              <option value="12">12:00</option>
-              <option value="13">13:00</option>
-              <option value="14">14:00</option>
-              <option value="15">15:00</option>
-              <option value="16">16:00</option>
-              <option value="17">17:00</option>
-              <option value="18">18:00</option>
-              <option value="19">19:00</option>
-              <option value="20">20:00</option>
-              <option value="21">21:00</option>
-              <option value="22">22:00</option>
-              <option value="23">23:00</option>
-              <option value="24">24:00</option>
-            </select>
-          </td>
-          <th>結合開始</th>
-          <td>
-            <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
-            <input type="button" value="結合開始" onclick="image_merge()">
-          </td>
-        </tr>
-      </table>
-    </form>
+  <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
     <table align="center">
       <tr>
+        <th>開始日</th>
         <td>
-          <!-- ↓ダウンロードボタンを表示する場所を確保 -->
-          <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
-          <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
+          <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
+        </td>
+        <th>終了日</th>
+        <td>
+          <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
+        </td>
+        <th>表示速度</th>
+        <td>
+          <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
+        </td>
+      </tr>
+      <tr>
+        <th>開始時間</th>
+        <td>
+          <select name="start_time" id="start_time" style="width: 80px;">
+            <option value="00" selected=select>00:00</option>
+            <option value="01">01:00</option>
+            <option value="02">02:00</option>
+            <option value="03">03:00</option>
+            <option value="04">04:00</option>
+            <option value="05">05:00</option>
+            <option value="06">06:00</option>
+            <option value="07">07:00</option>
+            <option value="08">08:00</option>
+            <option value="09">09:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+            <option value="13">13:00</option>
+            <option value="14">14:00</option>
+            <option value="15">15:00</option>
+            <option value="16">16:00</option>
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+            <option value="24">24:00</option>
+          </select>
+        </td>
+        <th>終了時間</th>
+        <td>
+          <select name="end_time" id="end_time" style="width: 80px;">
+            <option value="00">00:00</option>
+            <option value="01" selected=select>01:00</option>
+            <option value="02">02:00</option>
+            <option value="03">03:00</option>
+            <option value="04">04:00</option>
+            <option value="05">05:00</option>
+            <option value="06">06:00</option>
+            <option value="07">07:00</option>
+            <option value="08">08:00</option>
+            <option value="09">09:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+            <option value="13">13:00</option>
+            <option value="14">14:00</option>
+            <option value="15">15:00</option>
+            <option value="16">16:00</option>
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+            <option value="24">24:00</option>
+          </select>
+        </td>
+        <th>結合開始</th>
+        <td>
+          <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
+          <input type="button" value="結合開始" onclick="image_merge()">
         </td>
       </tr>
     </table>
+  </form>
+  <table align="center">
+    <tr>
+      <td>
+        <!-- ↓ダウンロードボタンを表示する場所を確保 -->
+        <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
+        <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
+      </td>
+    </tr>
+  </table>
   </div>
   <div class="col-12 mx-2">
     <table class="table table-bordered table-responsive">
