@@ -170,18 +170,22 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
 <head>
   <!-- 画面のリフレッシュ時間を設定：5分 -->
-  <meta http-equiv="Refresh" content="300">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+  <meta http-equiv="Refresh" content="300" name="refTime">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>開発用テスト画面_撮影画像</title>
-  <meta name="viewport" content="width=device-width">
+  <!-- <meta name="viewport" content="width=device-width"> -->
   <link rel="stylesheet" href="css/jquery-ui.min.css" />
-  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/main_dev.css" />
   <link href="css/lightbox.css" rel="stylesheet" />
+  <!-- BootstrapのCSS読み込み -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/jquery.ui.core.min.js"></script>
   <script src="js/jquery.ui.datepicker.min.js"></script>
   <script src="js/jquery.ui.datepicker-ja.min.js"></script>
+  <!-- BootstrapのJS読み込み -->
+  <script src="js/bootstrap.min.js"></script>
 
   <script>
     // サムネイル表示関数
@@ -282,8 +286,25 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
      */
     var f_name = "";
 
+    /**
+     * 画像結合処理を呼び出す非同期処理
+     */
     function image_merge() {
       dispLoading("結合処理中...");
+
+      //meta情報を取得して、リフレッシュを書き換え
+      var metaDiscre = document.head.children;
+      var metaLength = metaDiscre.length;
+      for (var i = 0; i < metaLength; i++) {
+        // metaタグをすべてループ
+        var proper = metaDiscre[i].getAttribute('name');
+        if (proper === 'refTime') {
+          //metaの名前がrefTimeの場合(リフレッシュのmeta)、書き換え処理
+          var ref = metaDiscre[i];
+          //contentに指定しているリフレッシュ秒数を空にする
+          ref.setAttribute('content', '');
+        }
+      }
 
       var now = new Date();
       var n_year = now.getFullYear();
@@ -295,6 +316,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       // 現在の日付を取得
       var n_today = n_year.toString() + n_mon.toString() + n_date.toString();
 
+      //入力された各種値の取得
       var s_date = document.getElementById("startdate").value;
       var e_date = document.getElementById("enddate").value;
       var s_time = $("#start_time").val();
@@ -327,50 +349,54 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
         return;
       }
 
-      // 画像結合処理のURLを変数に格納
-      serv_url = "http://160.16.239.88/farm/img_merge.php"
-      // 画像連結処理のウィンドウを開く
-      window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
+      // // 画像結合処理のURLを変数に格納
+      // serv_url = "http://160.16.239.88/farm/img_merge.php"
+      // // 画像連結処理のウィンドウを開く
+      // window.open(serv_url + "?start_date=" + s_date + "&end_date=" + e_date + "&start_time=" + s_time + "&end_time=" + e_time + "&disp_speed=" + d_speed + "&camera=" + <?php echo $camera_id ?>)
 
-      //テストてきにいったんウィンドウが開いたらローディング画像を削除する
-      removeLoading();
+      // //テストてきにいったんウィンドウが開いたらローディング画像を削除する
+      // removeLoading();
 
       // 非同期処理
-      // $.ajax({
-      //     url: 'img_merge.php',
-      //     method: 'POST',
-      //     timeout: 300000,
-      //     data: {
-      //       start_date: s_date,
-      //       end_date: e_date,
-      //       start_time: s_time,
-      //       end_time: e_time,
-      //       disp_speed: d_speed,
-      // camera: '<?php echo $camera_id ?>'
-
-      //     }
-      //   })
-      //   //通信成功時
-      //   .done(function(data) {
-      //     f_name = '/var/www/html/farm/images/dl/' + s_date + "_" + s_time + "00-" + e_date + "_" + e_time + "00_cam" + <?php echo $camera_id ?> + ".mp4";
-      //     alert('静止画データの結合に成功しました');
-      //   })
-      //   //失敗時
-      //   .fail(function(jqXHR, textStatus, errorThrown) {
-      //     // 通信失敗時の処理
-      //     alert('ファイルの取得に失敗しました。');
-      //     console.log("ajax通信に失敗しました");
-      //     console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
-      //     console.log("textStatus     : " + textStatus); // タイムアウト、パースエラー
-      //     console.log("errorThrown    : " + errorThrown.message); // 例外情報
-      //   })
-      //   //処理終了時
-      //   .always(function(data) {
-      //     //Loading画像を消す
-      //     removeLoading();
-      //   });
+      $.ajax({
+          url: 'img_merge.php',
+          method: 'POST',
+          timeout: 300000,
+          data: {
+            start_date: s_date,
+            end_date: e_date,
+            start_time: s_time,
+            end_time: e_time,
+            disp_speed: d_speed,
+            camera: '<?php echo $camera_id ?>'
+          }
+        })
+        //通信成功時
+        .done(function(data) {
+          f_name = '/var/www/html/farm/images/dl/' + s_date + "_" + s_time + "00-" + e_date + "_" + e_time + "00_cam" + <?php echo $camera_id ?> + ".mp4";
+          alert('静止画データの結合に成功しました');
+        })
+        //失敗時
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          // 通信失敗時の処理
+          alert('ファイルの取得に失敗しました。');
+          console.log("ajax通信に失敗しました");
+          console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
+          console.log("textStatus     : " + textStatus); // タイムアウト、パースエラー
+          console.log("errorThrown    : " + errorThrown.message); // 例外情報
+        })
+        //処理終了時
+        .always(function(data) {
+          //Loading画像を消す
+          removeLoading();
+          //contentの再設定
+          ref.setAttribute('content', '300');
+        });
     }
 
+    /**
+     * 各種ボタンの切り替え処理
+     */
     var playButton = function() {
       $.ajax('cmdbox.php', {
           type: 'get',
@@ -445,36 +471,48 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
 
     <br>
   </div>
-  <div style="padding:20px 0px 0px 0px;">
-    <table width="100%">
-      <tr>
-        <td algin="center" style="text-align:center;">
-          <!-- ここに大きな画像を出力する -->
-          <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
-            <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg">
-          </a>
-        </td>
-      </tr>
-    </table>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <table width="100%">
+          <tr>
+            <td algin="center" style="text-align:center;">
+              <!-- ここに大きな画像を出力する -->
+              <a href="<?php echo $mainImg; ?>" data-lightbox="image" target="_blank" rel="noopener noreferrer" id="mainImg_large">
+                <img src="<?php echo $mainImg; ?>" width="640" height="360" border=1 style="margin-left:auto;margin-right:auto;display:block" id="mainImg" class="mainImg">
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
-      <table align="center">
+  <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
+    <table align="center">
+      <thead>
+        <th>開始日</th>
+        <th>終了日</th>
+        <th>表示速度</th>
+      </thead>
+      <tbody>
         <tr>
-          <th>開始日</th>
           <td>
             <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
           </td>
-          <th>終了日</th>
           <td>
             <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
           </td>
-          <th>表示速度</th>
           <td>
             <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
           </td>
         </tr>
         <tr>
           <th>開始時間</th>
+          <th>終了時間</th>
+          <th>結合開始</th>
+        </tr>
+        <tr>
           <td>
             <select name="start_time" id="start_time" style="width: 80px;">
               <option value="00" selected=select>00:00</option>
@@ -504,7 +542,6 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
               <option value="24">24:00</option>
             </select>
           </td>
-          <th>終了時間</th>
           <td>
             <select name="end_time" id="end_time" style="width: 80px;">
               <option value="00">00:00</option>
@@ -534,24 +571,26 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
               <option value="24">24:00</option>
             </select>
           </td>
-          <th>結合開始</th>
           <td>
             <input type="hidden" name="camera" value="<?php echo $camera_id ?>" />
-            <input type="button" value="結合開始" onclick="image_merge()">
+            <input type="button" value="　実行　" onclick="image_merge()">
           </td>
         </tr>
-      </table>
-    </form>
-    <table widht="30%" align="center">
-      <tr>
-        <td>
-          <!-- ↓ダウンロードボタンを表示する場所を確保 -->
-          <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
-          <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
-        </td>
-      </tr>
+      </tbody>
     </table>
-    <table width="100%">
+  </form>
+  <table align="center">
+    <tr>
+      <td>
+        <!-- ↓ダウンロードボタンを表示する場所を確保 -->
+        <label text-align="center" style=" padding-left: 10px;" id="cmdBox"></label>
+        <!-- ↑cmdboxの処理でダウンロードボタンを表示する -->
+      </td>
+    </tr>
+  </table>
+  </div>
+  <div class="col-md-6 offset-md-3">
+    <table class="table table-bordered table-responsive">
       <tr>
         <?php
         $hh = substr($timeStr, 0, 2);
@@ -580,53 +619,53 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           }
 
         ?>
-          <td width="10%" algin="center" style="text-align:center;">
+          <!-- <td width="10%" algin="center" style="text-align:center;"> -->
+          <td algin="center" style="text-align:center;">
             <?php echo substr($timeStr, 0, 2); ?>:<?php echo sprintf('%02d', $min + $i); ?><br />
-            <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
+            <img class="miniImg" src="<?php echo $subImg; ?>" border=1 style="cursor:pointer;margin-left:auto;margin-right:auto;" onClick="viewImage('<?php echo $hh . $d_min . "00"; ?>');">
           </td>
         <?php } ?>
       </tr>
     </table>
+  </div>
 
-    <div style="text-align:center;width:100%;height:200px;">
-      <table style="margin-left:auto;margin-right:auto;">
-        <!--追加部分-->
+  <div style="text-align:center;width:100%;">
+    <table style="margin-left:auto;margin-right:auto;">
+      <!--追加部分-->
+      <tr>
+        <td></td>
+        <td>00分</td>
+        <td>10分</td>
+        <td>20分</td>
+        <td>30分</td>
+        <td>40分</td>
+        <td>50分</td>
+      </tr>
+      <!--追加部分-->
+      <?php for ($i = 0; $i < 24; $i++) { ?>
         <tr>
-          <td></td>
-          <td>00分</td>
-          <td>10分</td>
-          <td>20分</td>
-          <td>30分</td>
-          <td>40分</td>
-          <td>50分</td>
+          <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
+          <?php
+          $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
+          for ($j = 0; $j < 6; $j++) {
+            $m0 = $j;
+
+            // file_existsで検索する場合はIPアドレスから指定してあげる。
+            // それ以外はエイリアスのパスで指定する
+            $subImg = "img/Noimage_image.png";
+            if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
+              $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
+            }
+          ?>
+            <td>
+              <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
+                <img class="img-thumbnail" src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
+              </a>
+            </td>
+          <?php } ?>
         </tr>
-        <!--追加部分-->
-        <?php for ($i = 0; $i < 24; $i++) { ?>
-          <tr>
-            <td align="right"><?php echo str_pad($i, 2, 0, STR_PAD_LEFT); ?>時</td>
-            <?php
-            $hh = str_pad($i, 2, 0, STR_PAD_LEFT);
-            for ($j = 0; $j < 6; $j++) {
-              $m0 = $j;
-
-              // file_existsで検索する場合はIPアドレスから指定してあげる。
-              // それ以外はエイリアスのパスで指定する
-              $subImg = "img/Noimage_image.png";
-              if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg")) {
-                $subImg = "images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" . $hh . $m0 . "000_mini.jpg";
-              }
-            ?>
-              <td>
-                <a href="?date=<?php echo $dateStr; ?>&time=<?php echo $hh . $m0 ?>000&camera=<?php echo $camera_id ?>">
-                  <img src="<?php echo $subImg; ?>" width="85" height="48" border=1 style="margin-left:auto;margin-right:auto;">
-                </a>
-              </td>
-            <?php } ?>
-          </tr>
-        <?php } ?>
-      </table>
-    </div>
-
+      <?php } ?>
+    </table>
   </div>
   <script src="js/lightbox.js"></script>
 </body>

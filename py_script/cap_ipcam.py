@@ -46,45 +46,47 @@ def get_camera_info():
     size = (width,height)
 
 
-
 def image_cap():
     # 静止画の撮影用関数
     img_di = str(im_path) + day
     if not os.path.exists(img_di):
         os.mkdir(img_di)
     # 書込設定
-    global imnam
+    global imnam_org #ローカル保存用
+    imnam_org = str(img_di) + '/' + day + '_' + d_time + '00_org.jpg'
+    global imnam #アップロード用
     imnam = str(img_di) + '/' + day + '_' + d_time + '00.jpg'
-    global imnam_mini
+    global imnam_mini #サムネイル用
     imnam_mini = str(img_di) + '/' + day + '_' + d_time + '00_mini.jpg'
     # 撮影開始
     cap = cv2.VideoCapture(ipcam)
     cap.set(cv2.CAP_PROP_POS_FRAMES, 3)
     ret, frame = cap.read()
     if ret == True:
-        cv2.imwrite(imnam, frame)
+        cv2.imwrite(imnam_org, frame)
     if ret == False:
-        print("imageerror")
-    #print(cap)
+        print("capture error")
     # 終了
     cap.release()
-    # サムネイル画像作成　大きさは固定なので値そのまま書き込み
-    #print(imnam)
-    mini = cv2.imread(imnam)
-    mini2 = cv2.resize(mini, (85, 48))
-    cv2.imwrite(imnam_mini, mini2)
+    # アップロード用の画像作成　サイズはそれぞれ固定なので値そのまま書き込み
+    upimg = cv2.imread(imnam_org) #オリジナルファイル読み込み
+    mini = cv2.resize(upimg, (85, 48)) #サムネイル
+    cv2.imwrite(imnam_mini, mini)
+    cv2.imwrite(imnam, upimg, [int(cv2.IMWRITE_JPEG_QUALITY), 15])
+
 
 def fileup():
     # ファイルのアップロード　コマンド呼び出しで対応
     mkcall = 'sudo ssh root@160.16.239.88 mkdir -p ' + serverpath + day
     subprocess.call(mkcall.split())
-    upcall = 'sudo scp -C ' + imnam + ' root@160.16.239.88:' + serverpath + day + '/'
-    subprocess.call(upcall.split())
     upcall = 'sudo scp -C ' + imnam_mini + ' root@160.16.239.88:' + serverpath + day + '/'
+    subprocess.call(upcall.split())
+    upcall = 'sudo scp -C ' + imnam + ' root@160.16.239.88:' + serverpath + day + '/'
     subprocess.call(upcall.split())
     #print(imnam)
     #print(imnam_mini)
     #print(upcall)
+
 
 # main関数を呼び出す
 if __name__ == '__main__':

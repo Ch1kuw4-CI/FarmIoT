@@ -4,7 +4,7 @@ ini_set("max_execution_time", 180);
 
 session_start();
 if (!isset($_SESSION['USER'])) {
-  header('Location: farm_index.php');
+  header('Location: http://160.16.239.88/index.php');
   exit;
 }
 
@@ -37,36 +37,36 @@ if (isset($_GET['time'])) {
 }
 
 $org_date2 = $dateStr;
-if (isset($_POST['date_from'])){
-	if ($_POST['date_from'] != ""){
-		$dateStr = str_replace("/","",$_POST['date_from']);
-		$org_date2 = $_POST['date_from'];
-		$timeStr = "000000";
-	}
+if (isset($_POST['date_from'])) {
+  if ($_POST['date_from'] != "") {
+    $dateStr = str_replace("/", "", $_POST['date_from']);
+    $org_date2 = $_POST['date_from'];
+    $timeStr = "000000";
+  }
 }
 
-if (isset($_GET['date_from'])){
-	if ($_GET['date_from'] != ""){
-		$dateStr = str_replace("/","",$_GET['date_from']);
-		$org_date2 = $_GET['date_from'];
-		$timeStr = "000000";
-	}
+if (isset($_GET['date_from'])) {
+  if ($_GET['date_from'] != "") {
+    $dateStr = str_replace("/", "", $_GET['date_from']);
+    $org_date2 = $_GET['date_from'];
+    $timeStr = "000000";
+  }
 }
 
 $org_date3 = $dateStr;
-if (isset($_POST['date_to'])){
-	if ($_POST['date_to'] != ""){
-		$dateStr = str_replace("/","",$_POST['date_to']);
-		$org_date3 = $_POST['date_to'];
-		$timeStr = "000000";
-	}
+if (isset($_POST['date_to'])) {
+  if ($_POST['date_to'] != "") {
+    $dateStr = str_replace("/", "", $_POST['date_to']);
+    $org_date3 = $_POST['date_to'];
+    $timeStr = "000000";
+  }
 }
-if (isset($_GET['date_to'])){
-	if ($_GET['date_to'] != ""){
-		$dateStr = str_replace("/","",$_GET['date_to']);
-		$org_date3 = $_GET['date_to'];
-		$timeStr = "000000";
-	}
+if (isset($_GET['date_to'])) {
+  if ($_GET['date_to'] != "") {
+    $dateStr = str_replace("/", "", $_GET['date_to']);
+    $org_date3 = $_GET['date_to'];
+    $timeStr = "000000";
+  }
 }
 
 $dArray;
@@ -136,7 +136,7 @@ if (file_exists("/var/www/html/images/" . $dateStr . "/" . $dateStr . "_" . $tim
 // MySQLより該当日の測定値(平均)を取得（グラフ表示で使用）
 $mysqli = new mysqli('localhost', 'root', 'pm#corporate1', 'FARM_IoT');
 $sql = "select  substring(date_format(TIME,'%H:%i'),1,4) AS JIKAN,round(AVG(SOIL_TEMP),2) as SOIL_TEMP,round(AVG(SOIL_WET),2) as SOIL_WET,round(AVG(SOIL_EC),2) as SOIL_EC,round(AVG(AIR_TEMP_1),2) as AIR_TEMP1,round(AVG(AIR_WET),2) as AIR_WET FROM farm where DAY = '";
-$sql = $sql . str_replace("/","-",$org_date);
+$sql = $sql . str_replace("/", "-", $org_date);
 $sql = $sql . "' GROUP BY substring(date_format(TIME,'%H:%i'),1,4) order by JIKAN";
 $res = $mysqli->query($sql);
 $result1 = "";
@@ -312,9 +312,9 @@ $mysqli->close();
   <?php echo $org_date; ?>
 
   <style type="text/css">
-  span.abc {
-    display: inline-block;
-  }
+    span.abc {
+      display: inline-block;
+    }
   </style>
 
   <strong>
@@ -408,9 +408,9 @@ $mysqli->close();
           labelString: "電気伝導度EC(mS/cm)"
         },
         ticks: {
-          max: 1.0, //<?php echo $max[2] + 10; ?>,
-          min: 0, //<?php echo $min[2] - 10; ?>,
-          stepSize: 0.1
+          max: 2.0, //<?php echo $max[2] + 10; ?>,
+          min: 0.0, //<?php echo $min[2] - 10; ?>,
+          stepSize: 0.2
         },
         gridLines: {
           drawOnChartArea: false,
@@ -422,7 +422,7 @@ $mysqli->close();
 
 <script>
   var ctx = document.getElementById("myChart1").getContext("2d");
-  ctx.canvas.width = window.innerWidth -69;
+  ctx.canvas.width = window.innerWidth - 69;
   ctx.canvas.height = 250;
   var myChart = new Chart(ctx, {
     type: "bar",
