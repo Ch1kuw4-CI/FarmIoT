@@ -24,16 +24,16 @@ def MESSAGE_SET(str_message):
     """
     LINEへ通知するメッセージを設定する処理
     """
-    if limit_tbl_item == "soil_temp":
+    if limit_tbl_item == "SOIL_TEMP":
         str_message = str_message + "\n土壌温度(" + format(current_value) + "℃)"
-    elif limit_tbl_item == "soil_wet":
+    elif limit_tbl_item == "SOIL_WET":
         str_message = str_message + "\n土壌湿度(" + format(current_value) + "%)"
     elif limit_tbl_item == "soil_ec":
         str_message = str_message + \
             "\n土壌電気伝導度(" + format(current_value) + "mS/cm)"
     elif limit_tbl_item == "AIR_TEMP_1":
         str_message = str_message + "\n気温(" + format(current_value) + "℃)"
-    elif limit_tbl_item == "air_wet":
+    elif limit_tbl_item == "AIR_WET":
         str_message = str_message + "\n湿度(" + format(current_value) + "%)"
     else:
         pass
@@ -74,7 +74,7 @@ if format(DAYTIME) > format(before_10min):
 # --< 2020/04/15 UPDATE-START >--
 #    cur.execute("select * from limit_tbl where item <> 'SYSTEM';")
     cur.execute(
-        "select * from limit_tbl where item in ('soil_temp','soil_wet','AIR_TEMP_1','air_wet');")
+        "select * from limit_tbl where item in ('SOIL_TEMP','SOIL_WET','AIR_TEMP_1','AIR_WET');")
 # --< 2020/04/15 UPDATE-END >--
     for row in cur.fetchall():
         # テーブルの要素を変数に入れる
@@ -84,15 +84,15 @@ if format(DAYTIME) > format(before_10min):
         limit_tbl_flg = row[4]
 
         # 各項目で測定値をチェックする
-        if limit_tbl_item == "soil_temp":  # 土壌温度
+        if limit_tbl_item == "SOIL_TEMP":  # 土壌温度
             current_value = soil_temp
-        elif limit_tbl_item == "soil_wet":  # 土壌湿度
+        elif limit_tbl_item == "SOIL_WET":  # 土壌湿度
             current_value = soil_wet
         elif limit_tbl_item == "soil_ec":  # 電気伝導度
             current_value = soil_ec
         elif limit_tbl_item == "AIR_TEMP_1":  # 気温
             current_value = air_temp
-        elif limit_tbl_item == "air_wet":  # 湿度
+        elif limit_tbl_item == "AIR_WET":  # 湿度
             current_value = air_wet
         else:
             pass
