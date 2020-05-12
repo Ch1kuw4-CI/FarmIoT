@@ -12,7 +12,7 @@ import time , datetime
 def LINE_notify(LINE_MESSAGE):
     url = "https://notify-api.line.me/api/notify"
 #    token = #Here ACCESS-TOKEN input
-    token = "ObFoG8pLNgIGpm04j7t0abp9wKMAJAuHHp08VFihIOb" # <----TEST用のLINEトークン
+    token = "24TnXRwd18nGIpoicMYlzwk46D1p6blKcnufSKBh8Qe" # <----くろぜむ死活監視用のLINEトークン
     headers = {"Authorization" : "Bearer "+ token}
     payload = {"message" :  LINE_MESSAGE}
     r = requests.post(url ,headers = headers ,params=payload)
@@ -120,5 +120,5 @@ conn.close
 
 # 新たにアラートが発生、又は復旧した場合はLINE通知する
 if ALERT_FLG == "ON":
-#    LINE_notify(LINE_MESSAGE) # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
-    print(LINE_MESSAGE) # LINE通知の代わりにテストでメッセージを確認する為の画面表示
+    LINE_notify(LINE_MESSAGE) # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
+#    print(LINE_MESSAGE) # LINE通知の代わりにテストでメッセージを確認する為の画面表示
