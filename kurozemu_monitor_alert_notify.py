@@ -97,7 +97,7 @@ def LINE_notify(str_message):
 
     headers = {"Authorization": "Bearer " + line_token}
     payload = {"message":  str_message}
-    r = requests.post(url, headers=headers, params=payload)
+#    r = requests.post(url, headers=headers, params=payload)
 
 
 # 画像格納フォルダパス
@@ -123,14 +123,18 @@ for row in cur.fetchall():
 cur.close
 
 # 測定値が直近のものか(5分前と比較)判断、測定が止まっていればアラート通知
-DAYTIME = format(DAY_TBL) + " " + format(TIME_TBL) + ".999999"
+if len(format(TIME_TBL)) == 7:
+    DAYTIME = format(DAY_TBL) + " 0" + format(TIME_TBL) + ".999999"
+else:
+    DAYTIME = format(DAY_TBL) + " " + format(TIME_TBL) + ".999999"
+
 if format(DAYTIME) < format(BEFORE_5min):
     # 古い測定値なので測定停止のアラート通知を行う
     cur.execute("select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = 'KEISOKU';")
     for row in cur.fetchall():
         MONITOR_FLG  = row[2]
     if MONITOR_FLG == "OK":
-        ALERT_FLG = "ON" # アラート通知を"ON"にする（計測停止のLINE通知）
+        alert_flg = "ON" # アラート通知を"ON"にする（計測停止のLINE通知）
         line_message = line_message + "\n計測が停止しています。"
     # システム監視テーブルの更新
     cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
@@ -140,7 +144,7 @@ else:
     for row in cur.fetchall():
         MONITOR_FLG  = row[2]
     if MONITOR_FLG == "NG":
-        ALERT_FLG = "ON" # アラート通知を"ON"にする（計測再開のLINE通知）
+        alert_flg = "ON" # アラート通知を"ON"にする（計測再開のLINE通知）
         line_message = line_message + "\n計測を再開しました。"
     # システム監視テーブルの更新（強制的にタイムスタンプを更新）
     cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
@@ -166,7 +170,7 @@ for row in cur.fetchall():
         for row in cur.fetchall():
             MONITOR_FLG  = row[2]
         if MONITOR_FLG == "OK":
-            ALERT_FLG = "ON" # アラート通知を"ON"にする（画像生成停止のLINE通知）
+            alert_flg = "ON" # アラート通知を"ON"にする（画像生成停止のLINE通知）
             line_message = line_message + "\n" + CAM_ITEM + " の画像生成が停止しています。"
             # システム監視テーブルの更新
         STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = '" + CAM_ITEM + "';"
@@ -178,7 +182,7 @@ for row in cur.fetchall():
         for row in cur.fetchall():
             MONITOR_FLG  = row[2]
         if MONITOR_FLG == "NG":
-            ALERT_FLG = "ON" # アラート通知を"ON"にする（画像生成再開のLINE通知）
+            alert_flg = "ON" # アラート通知を"ON"にする（画像生成再開のLINE通知）
             line_message = line_message + "\n" + CAM_ITEM +" の画像生成を再開しました。"
         # システム監視テーブルの更新（強制的にタイムスタンプを更新）
         STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='" + CAM_ITEM + "';"
@@ -195,6 +199,6 @@ conn.close
 # **************************************
 
 # 新たにアラートが発生、又は復旧した場合はLINE通知する
-if ALERT_FLG == "ON":
+if alert_flg == "ON":
     LINE_notify(line_message) # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
     print(line_message) # LINE通知の代わりにテストでメッセージを確認する為の画面表示
