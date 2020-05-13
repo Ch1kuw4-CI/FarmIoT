@@ -97,7 +97,7 @@ def LINE_notify(str_message):
 
     headers = {"Authorization": "Bearer " + line_token}
     payload = {"message":  str_message}
-    r = requests.post(url, headers=headers, params=payload)
+#    r = requests.post(url, headers=headers, params=payload)
 
 
 # 画像格納フォルダパス
@@ -120,7 +120,7 @@ cur.execute("select * from farm order by day desc, time desc limit 1;")
 for row in cur.fetchall():
     DAY_TBL       = row[0]
     TIME_TBL      = row[1]
-cur.close()
+cur.close
 
 # 測定値が直近のものか(5分前と比較)判断、測定が止まっていればアラート通知
 if len(format(TIME_TBL)) == 7:
@@ -138,7 +138,7 @@ if format(DAYTIME) < format(BEFORE_5min):
         line_message = line_message + "\n計測が停止しています。"
     # システム監視テーブルの更新
     cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
-    cur.close()
+    cur.close
 else:
     cur.execute("select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = 'KEISOKU';")
     for row in cur.fetchall():
@@ -148,8 +148,8 @@ else:
         line_message = line_message + "\n計測を再開しました。"
     # システム監視テーブルの更新（強制的にタイムスタンプを更新）
     cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
-    cur.close()
-conn.close()
+    cur.close
+conn.close
 
 
 # ****************************************************************************
@@ -175,7 +175,7 @@ for row in cur.fetchall():
             # システム監視テーブルの更新
         STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = '" + CAM_ITEM + "';"
         cur2.execute(STR_SQL)
-        cur2.close()
+        cur2.close
     else:
         STR_SQL = "select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='" + CAM_ITEM + "';"
         cur2.execute(STR_SQL)
@@ -187,11 +187,11 @@ for row in cur.fetchall():
         # システム監視テーブルの更新（強制的にタイムスタンプを更新）
         STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='" + CAM_ITEM + "';"
         cur2.execute(STR_SQL)
-        cur2.close()
+        cur2.close
 
-cur.close()
+cur.close
 conn.commit()
-conn.close()
+conn.close
 
 
 # **************************************
