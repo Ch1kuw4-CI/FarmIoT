@@ -223,7 +223,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
             update_cur.execute(upd_limit_sql, (limit_tbl_flg, limit_tbl_item))
 
         # しきい値テーブルの更新（測定値、取得再開の判定）
-        check_cur.execute("SELECT * FROM limit_tbl WHERE item 'SYSTEM';")
+        check_cur.execute("SELECT * FROM limit_tbl WHERE item = 'SYSTEM';")
 
         for check_row in check_cur.fetchall():
             limit_tbl_flg = check_row[4]
