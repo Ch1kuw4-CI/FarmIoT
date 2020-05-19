@@ -33,6 +33,7 @@ alert_flg = "OFF"  # LINEアラートが発生したら"ON"
 before_10min = time.time() - 600
 before_10min = datetime.datetime.fromtimestamp(before_10min)
 
+
 def main():
     """
     メイン関数
@@ -43,7 +44,8 @@ def main():
 
     # 新たにアラートが発生、又は復旧した場合はLINE通知する
     if alert_flg == "ON":
-        send_line_message(line_message)  # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
+        # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
+        send_line_message(line_message)
         print(line_message)  # LINE通知の代わりにテストでメッセージを確認する為の画面表示
 
 
@@ -54,7 +56,7 @@ def send_line_message(str_message):
 
     url = "https://notify-api.line.me/api/notify"
 
-    #LINEトークン取得処理
+    # LINEトークン取得処理
     common.get_line_token()
 
     headers = {"Authorization": "Bearer " + common.line_token}
@@ -64,6 +66,7 @@ def send_line_message(str_message):
     # 動作確認のためコメントアウト
     # r = requests.post(url, headers=headers, params=payload)
     # *********************************************************
+
 
 def set_line_message(str_message):
     """
@@ -109,6 +112,11 @@ def get_data():
 
     common.close_con_connect(common.pj_con, data_cur)
 
+    # 測定値チェック処理の呼び出し
+    check_data(day_tbl, time_tbl, soil_temp,
+               soil_wet, soil_ec, air_temp, air_wet)
+
+
 def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_temp, data_a_wet):
     """
     取得した測定値のチェック処理
@@ -119,7 +127,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
     global current_value
 
     # 測定値が直近のものか(10分前と比較)判断、測定が止まっていればアラート通知
-    day_time = format(day_tbl) + " " + format(time_tbl) + ".999999"
+    day_time = format(data_day) + " " + format(data_time) + ".999999"
 
     # SYSTEMの値を取得するSQL
     sel_sys_sql = "SELECT * FROM limit_tbl WHERE item = 'SYSTEM'"
@@ -130,10 +138,10 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
         alert_cur = common.connect_database_project()
 
         # SYSTEMの値を更新するSQ
-        upd_sys_sql ="UPDATE limit_tbl SET flg_sts = 'NG' WHERE item = 'SYSTEM'"
+        upd_sys_sql = "UPDATE limit_tbl SET flg_sts = 'NG' WHERE item = 'SYSTEM'"
 
-        # UPDATEのSQLを実行する
-        alert_cur.execute(upd_sys_sql)
+        # SELECTのSQLを実行する
+        alert_cur.execute(sel_sys_sql)
 
         for row in alert_cur.fetchall():
             limit_tbl_flg = row[4]
@@ -165,15 +173,15 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
 
             # 各項目で測定値をチェックする
             if limit_tbl_item == "SOIL_TEMP":  # 土壌温度
-                current_value = soil_temp
+                current_value = data_s_temp
             elif limit_tbl_item == "SOIL_WET":  # 土壌湿度
-                current_value = soil_wet
+                current_value = data_s_wet
             # elif limit_tbl_item == "soil_ec":  # 電気伝導度
             #     current_value = soil_ec
             elif limit_tbl_item == "AIR_TEMP_1":  # 気温
-                current_value = air_temp
+                current_value = data_a_temp
             elif limit_tbl_item == "AIR_WET":  # 湿度
-                current_value = air_wet
+                current_value = data_a_wet
             else:
                 pass
 
@@ -188,13 +196,15 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
                 elif limit_tbl_flg == "2":  # フラグの値が"2"なら"OK"を立て、復旧のLINEメッセージを設定
                     alert_flg = "ON"  # アラート通知を"ON"にする（復旧のLINE通知）
                     limit_tbl_flg = "OK"
-                    line_message = set_line_message(line_message) + "が範囲内になりました。"
+                    line_message = set_line_message(
+                        line_message) + "が範囲内になりました。"
                 else:
                     pass
             elif current_value < limit_tbl_min:  # 最低値を下回った場合
                 if limit_tbl_flg == "OK":  # フラグの値が"OK"ならLINEアラート通知（低下）
                     alert_flg = "ON"  # アラート通知を"ON"にする（発生のLINE通知）
-                    line_message = set_line_message(line_message) + "が設定値より低下しました。"
+                    line_message = set_line_message(
+                        line_message) + "が設定値より低下しました。"
                 else:
                     pass
                 limit_tbl_flg = "NG"  # しきい値テーブルのフラグに"NG"を立てる
@@ -202,7 +212,8 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
             elif current_value > limit_tbl_max:  # 最大値を上回った場合
                 if limit_tbl_flg == "OK":  # フラグの値が"OK"ならLINEアラート通知（超過）
                     alert_flg = "ON"  # アラート通知を"ON"にする（発生のLINE通知）
-                    line_message = set_line_message(line_message) + "が設定値を超過しました。"
+                    line_message = set_line_message(
+                        line_message) + "が設定値を超過しました。"
                 else:
                     pass
                 limit_tbl_flg = "NG"  # しきい値テーブルのフラグに"NG"を立てる
@@ -220,7 +231,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
             alert_flg = "ON"  # アラート通知を"ON"にする（発生のLINE通知）
             line_message = line_message + "\n計測が再開されました。"
             # リミットテーブルの更新
-            update_sql = "UPDATE limit_tbl SET flg_sts = 'OK' WHERE item = 'SYSTEM';""
+            update_sql = "UPDATE limit_tbl SET flg_sts = 'OK' WHERE item = 'SYSTEM';"
             update_cur.execute(update_sql)
 
         check_cur.close()
@@ -334,6 +345,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
 #             "UPDATE limit_tbl SET flg_sts = 'NG' WHERE item = 'SYSTEM';")
 #     cur.close()
 # conn.close()
+
 
 # メイン関数を実行
 if __name__ == "__main__":
