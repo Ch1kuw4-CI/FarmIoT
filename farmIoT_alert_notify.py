@@ -17,7 +17,7 @@ COMMON_DB_NAME = "common_db"  # 共通DBのDB名
 PJ_DB_USER = "root"  # プロジェクトで使用するDBのユーザ名
 PJ_DB_PASS = "pm#corporate1"  # プロジェクトで使用するDBのパスワード
 PJ_DB_HOST = "localhost"  # プロジェクトで使用するDBのホスト名
-PJ_DB_NAME = "FARMM_IoT"  # プロジェクトで使用するDB名
+PJ_DB_NAME = "FARM_IoT"  # プロジェクトで使用するDB名
 # ---------------------------------------
 
 # -----グローバル変数群-----
