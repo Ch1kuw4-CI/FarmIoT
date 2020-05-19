@@ -18,7 +18,7 @@ PJ_DB_NAME = "FARMM_IoT"  # プロジェクトで使用するDB名
 # -----グローバル変数群-----
 pj_name = "kurozemu"  # プロジェクト名
 line_token = ""  # LINEトークン
-common_pj = None  # 共通データベースへの接続情報を保持する変数
+common_con = None  # 共通データベースへの接続情報を保持する変数
 pj_con = None  # プロジェクトごとのデータベースへの接続情報を保持する変数
 # --------------------------
 
@@ -27,10 +27,16 @@ def connect_database_common():
     """
     共通データベースにアクセスする処理
     """
-    global common_pj
+    global common_con
 
-    common_pj = mysql.connector.connect(
+    common_con = mysql.connector.connect(
         user=COMMON_DB_USER, password=COMMON_DB_PASS, host=COMMON_DB_HOST, database=COMMON_DB_NAME)
+
+    # 上記の接続のカーソル作成
+    common_cur = common_con.cursor()
+
+    # カーソルをreturn
+    return common_cur
 
 
 def connect_database_project():
@@ -41,6 +47,12 @@ def connect_database_project():
 
     pj_con = mysql.connector.connect(
         user=PJ_DB_USER, password=PJ_DB_PASS, host=PJ_DB_HOST, database=PJ_DB_NAME)
+
+    # 上記の接続のカーソル作成
+    pj_cur = pj_con.cursor()
+
+    # カーソルをreturn
+    return pj_cur
 
 
 def close_con_connect(con_name, cur_name):
@@ -62,7 +74,7 @@ def get_line_token():
     connect_database_common()
 
     # 共通データベースのカーソルを取得
-    line_cur = common_pj.cursor()
+    line_cur = common_con.cursor()
     line_cur.execute(
         "SELECT * FROM m_common_token WHERE project_name='" + pj_name + "'")
 
@@ -71,4 +83,4 @@ def get_line_token():
         line_token = line_row[1]
 
     # 後処理としてクローズ処理を実行する
-    close_con_connect(common_pj, line_cur)
+    close_con_connect(common_con, line_cur)

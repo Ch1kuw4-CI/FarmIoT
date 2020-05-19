@@ -1,13 +1,16 @@
-#!/usr/bin/env python abort_measure LINE alert 
-#coding=utf-8
-#----- くろぜむ農園：死活監視(測定値取得、画像生成)プログラム -----
-#※マルキンサーバ上での動作は確認済、実際の大槌監視LinuxPCでは未確認なのでサーバ間での接続確認が必要
+"""
+ ----- くろぜむ農園：死活監視(測定値取得、画像生成)プログラム -----
+"""
 
+#!/usr/bin/env python abort_measure LINE alert
+# coding=utf-8
+
+import os
+import time
+import datetime
 import requests
 import mysql.connector
-import os
-import time , datetime
-
+from common_module import common  # 共通モジュールのimport
 
 
 # -----データベースの情報を格納する定数-----
@@ -22,183 +25,274 @@ PJ_DB_HOST = "localhost"  # プロジェクトで使用するDBのホスト名
 PJ_DB_NAME = "FARM_IoT"  # プロジェクトで使用するDB名
 # ---------------------------------------
 
+# -----定数-----
+IMAGE_DIR = "/var/www/html/farm/images"  # 画像格納フォルダパス
+
+# ---------------------------------------
+
 # -----グローバル変数群-----
-pj_name = "monitor"  # プロジェクト名
 limit_tbl_item = None  # 規定値テーブルの項目名
 current_value = None  # 既定値テーブルの現在値
 smtp_addr = None  # 送信元アドレス
 smtp = None  # 送信元接続情報
-line_token = ""  # LINEトークン
-common_pj = None  # 共通データベースへの接続情報を保持する変数
-pj_con = None  # プロジェクトごとのデータベースへの接続情報を保持する変数
 line_message = "<< くろぜむ監視アラート >>"  # LINE通知のメッセージタイトル
 alert_flg = "OFF"  # LINEアラートが発生したら"ON"
 # --------------------------
 
-def connect_database_common():
+# 現在の日付と5分前の時刻を取得
+before_5min = time.time() - 300
+before_5min = datetime.datetime.fromtimestamp(before_5min)
+date_today = datetime.date.today()
+
+
+def main():
     """
-    共通データベースにアクセスする処理
+    メイン関数
     """
-    global common_pj
+    get_data()  # データ取得処理の呼び出し
+    check_image()  # 画像生成チェック処理の呼び出し
 
-    common_pj = mysql.connector.connect(
-        user=COMMON_DB_USER, password=COMMON_DB_PASS, host=COMMON_DB_HOST, database=COMMON_DB_NAME)
-
-
-def connect_database_project():
-    """
-    プロジェクトごとのデータベースにアクセスする処理
-    """
-    global pj_con
-
-    pj_con = mysql.connector.connect(
-        user=PJ_DB_USER, password=PJ_DB_PASS, host=PJ_DB_HOST, database=PJ_DB_NAME)
+    # 新たにアラートが発生、又は復旧した場合はLINE通知する
+    if alert_flg == "ON":
+        # LINEへ通知
+        send_line_message(line_message)  # <--- この行をコメントアウトすればLINE通知が止まる
+        print(line_message)  # LINE通知の代わりにテストでメッセージを確認する為の画面表示
 
 
-def close_con_connect(con_name, cur_name):
-    """
-    引数で受け取った、データベース接続情報と、カーソルをCloseする処理
-    """
-    con_name.close()
-    cur_name.close()
-
-def get_line_token():
-    """
-    共通データベースからLINEトークンを取得する処理
-    """
-    # グローバル変数に代入するために宣言
-    global line_token
-
-    # データベース接続処理
-    connect_database_common()
-
-    # 共通データベースのカーソルを取得
-    line_cur = common_pj.cursor()
-    line_cur.execute(
-        "SELECT * FROM m_common_token WHERE project_name='" + pj_name + "'")
-
-    for line_row in line_cur.fetchall():
-        # line_id = line_row[0]
-        line_token = line_row[1]
-
-    # 後処理としてクローズ処理を実行する
-    close_con_connect(common_pj, line_cur)
-
-
-def LINE_notify(str_message):
+def send_line_message(str_message):
     """
     LINE Notifyの接続処理
     """
 
     url = "https://notify-api.line.me/api/notify"
 
-    #LINEトークン取得処理
-    get_line_token()
+    # LINEトークン取得処理
+    common.get_line_token()
 
-    headers = {"Authorization": "Bearer " + line_token}
+    headers = {"Authorization": "Bearer " + common.line_token}
     payload = {"message":  str_message}
-#    r = requests.post(url, headers=headers, params=payload)
+    # *********************************************************
+    # 動作確認のためコメントアウト
+    # r = requests.post(url, headers=headers, params=payload)
+    # *********************************************************
 
 
-# 画像格納フォルダパス
-IMAGE_DIR = "/var/www/html/farm/images"
+def get_data():
+    """
+    直近の測定値を取得する処理
+    """
+    data_cur = common.connect_database_project()
 
-# 今日の日付と5分前の時刻を取得
-BEFORE_5min = time.time() - 300
-BEFORE_5min = datetime.datetime.fromtimestamp(BEFORE_5min)
-DATE_TODAY  = datetime.date.today()
+    # 直近のデータを取得するSQL句の発行
+    sel_sql = "SELECT * FROM farm ORDER BY desc, time DESC LIMIT 1;"
 
+    # SQLを実行する
+    data_cur.execute(sel_sql)
 
-# ****************************************
-# ***** 計測が稼働しているかチェック *****
-# ****************************************
+    for row in data_cur.fetchall():
+        d_day = row[0]
+        d_time = row[1]
 
-# マルキンサーバの測定値テーブルに接続し直近の測定値を取得 
-conn = mysql.connector.connect(user=PJ_DB_USER,password=PJ_DB_PASS,host=PJ_DB_HOST,database=PJ_DB_NAME)
-cur = conn.cursor()
-cur.execute("select * from farm order by day desc, time desc limit 1;")
-for row in cur.fetchall():
-    DAY_TBL       = row[0]
-    TIME_TBL      = row[1]
-cur.close
+    common.close_con_connect(common.pj_con, data_cur)
 
-# 測定値が直近のものか(5分前と比較)判断、測定が止まっていればアラート通知
-if len(format(TIME_TBL)) == 7:
-    DAYTIME = format(DAY_TBL) + " 0" + format(TIME_TBL) + ".999999"
-else:
-    DAYTIME = format(DAY_TBL) + " " + format(TIME_TBL) + ".999999"
-
-if format(DAYTIME) < format(BEFORE_5min):
-    # 古い測定値なので測定停止のアラート通知を行う
-    cur.execute("select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = 'KEISOKU';")
-    for row in cur.fetchall():
-        MONITOR_FLG  = row[2]
-    if MONITOR_FLG == "OK":
-        alert_flg = "ON" # アラート通知を"ON"にする（計測停止のLINE通知）
-        line_message = line_message + "\n計測が停止しています。"
-    # システム監視テーブルの更新
-    cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
-    cur.close
-else:
-    cur.execute("select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = 'KEISOKU';")
-    for row in cur.fetchall():
-        MONITOR_FLG  = row[2]
-    if MONITOR_FLG == "NG":
-        alert_flg = "ON" # アラート通知を"ON"にする（計測再開のLINE通知）
-        line_message = line_message + "\n計測を再開しました。"
-    # システム監視テーブルの更新（強制的にタイムスタンプを更新）
-    cur.execute("UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='KEISOKU';")
-    cur.close
-conn.close
+    check_data(d_day, d_time)
 
 
-# ****************************************************************************
-# ***** 画像が生成されているかチェック（カメラマスタ：M_CAMERAより抽出） *****
-# ****************************************************************************
-cur.execute("select * from M_CAMERA where CAMERA_STATUS = '1';")
-for row in cur.fetchall():
-    CAMERA_ID     = row[0]
-    CAM_ITEM = "CAMERA" + format(CAMERA_ID)
-    # フォルダの更新日をチェック
-    FILE_TIMESTAMP = datetime.datetime.fromtimestamp(os.path.getmtime(IMAGE_DIR + "/" + format(CAMERA_ID) + "/" + format(DATE_TODAY).replace("-","")))
-    # 画像生成が停止しているか判定
-    cur2 = conn.cursor()
-    if format(FILE_TIMESTAMP) < format(BEFORE_5min):
-        # 画像フォルダのタイムスタンプが５分前より古いので画像停止のアラート通知を行う
-        STR_SQL = "select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = '" + CAM_ITEM + "';"
-        cur2.execute(STR_SQL)
-        for row in cur.fetchall():
-            MONITOR_FLG  = row[2]
-        if MONITOR_FLG == "OK":
-            alert_flg = "ON" # アラート通知を"ON"にする（画像生成停止のLINE通知）
-            line_message = line_message + "\n" + CAM_ITEM + " の画像生成が停止しています。"
-            # システム監視テーブルの更新
-        STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID = '" + CAM_ITEM + "';"
-        cur2.execute(STR_SQL)
-        cur2.close
+def check_data(data_day, data_time):
+    """
+    測定値が取得できているかチェックする関数
+    """
+
+    global alert_flg
+    global line_message
+
+    # 共通データベースにアクセスする
+    check_cur = common.connect_database_common()
+
+    # 監視テーブルから、プロジェクトのデータを取得するSQL
+    sel_sql = "SELECT * FROM m_monitor WHERE system_name = '" + \
+        common.pj_name + "' AND monitor_name = 'KEISOKU';"
+
+    # 監視テーブルの値をOKで更新するSQL
+    upd_ok_sql = "UPDATE m_monitor SET MONITOR_STATUS = 'OK' , \
+        CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = '" + \
+        common.pj_name + "' AND monitor_name ='KEISOKU';"
+
+    upd_ng_sql = "UPDATE m_monitor SET MONITOR_STATUS = 'NG' , \
+        CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = '" + \
+        common.pj_name + "' AND monitor_name ='KEISOKU';"
+
+    # 監視履歴テーブルの値をOKでINSERTするSQL
+    ins_ok_sql = "INSERT INTO h_monitor ( \
+        system_id, system_name, monitor_name, monitor_status, check_time) \
+        VALUES ("
+
+    # 監視履歴テーブルの値をNGでINSERTするSQL
+    ins_ng_sql = "INSERT INTO h_monitor ( \
+        system_id, system_name, monitor_name, monitor_status, check_time) \
+        VALUES( "
+
+    # 時刻の表示が「05：00:00」でなく「5:00:00」のため桁合わせ
+    if len(format(data_time)) == 7:
+        day_time = format(data_day) + " 0" + format(data_time) + ".999999"
     else:
-        STR_SQL = "select * from MONITOR_TBL where SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='" + CAM_ITEM + "';"
-        cur2.execute(STR_SQL)
-        for row in cur.fetchall():
-            MONITOR_FLG  = row[2]
-        if MONITOR_FLG == "NG":
-            alert_flg = "ON" # アラート通知を"ON"にする（画像生成再開のLINE通知）
-            line_message = line_message + "\n" + CAM_ITEM +" の画像生成を再開しました。"
-        # システム監視テーブルの更新（強制的にタイムスタンプを更新）
-        STR_SQL = "UPDATE MONITOR_TBL SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() WHERE SYSTEM_ID = 'KUROZEMU' AND MONITOR_ID ='" + CAM_ITEM + "';"
-        cur2.execute(STR_SQL)
-        cur2.close
+        day_time = format(data_day) + " " + format(data_time) + ".999999"
 
-cur.close
-conn.commit()
-conn.close
+    # 測定値が直近のものか(5分前と比較)判断、測定が止まっていればアラート通知
+    if format(day_time) < format(before_5min):
+        # 古い測定値なので測定停止のアラート通知を行う
+        check_cur.execute(sel_sql)
+
+        for monitor_row in check_cur.fetchall():
+            sys_id = monitor_row[0]
+            sys_name = monitor_row[1]
+            monitor_name = monitor_row[2]
+            monitor_status = monitor_row[3]
+        if monitor_status == "OK":
+            alert_flg = "ON"  # アラート通知を"ON"にする（計測停止のLINE通知）
+            line_message = line_message + "\n計測が停止しています。"
+
+        # INSERT句の生成
+        ins_ng_sql = ins_ng_sql + sys_id + ", '" + sys_name + \
+            "', '" + monitor_name + "', 'NG', NOW() )"
+
+        # システム監視テーブルのUPDATE
+        check_cur.execute(upd_ng_sql)
+
+        # 監視履歴テーブルのINSERT
+        check_cur.execute(ins_ng_sql)
+
+    else:
+        check_cur.execute(sel_sql)
+        for monitor_row in check_cur.fetchall():
+            sys_id = monitor_row[0]
+            sys_name = monitor_row[1]
+            monitor_name = monitor_row[2]
+            monitor_status = monitor_row[3]
+        if monitor_status == "NG":
+            alert_flg = "ON"  # アラート通知を"ON"にする（計測再開のLINE通知）
+            line_message = line_message + "\n計測を再開しました。"
+
+        # INSERT句の生成
+        ins_ok_sql = ins_ok_sql + sys_id + ", '" + sys_name + \
+            "', '" + monitor_name + "', 'OK', NOW() )"
+        # システム監視テーブルのUPDATE（強制的にタイムスタンプを更新）
+        check_cur.execute(upd_ok_sql)
+
+        # 監視履歴テーブルのINSERT
+        check_cur.execute(ins_ok_sql)
+
+    common.close_con_connect(common.common_con, check_cur)
 
 
-# **************************************
-# ***** アラート発生の有無チェック *****
-# **************************************
+def check_image():
+    """
+    画像が生成されているかチェックする関数
+    """
+    global alert_flg
+    global line_message
+    global limit_tbl_item
 
-# 新たにアラートが発生、又は復旧した場合はLINE通知する
-if alert_flg == "ON":
-    LINE_notify(line_message) # LINEへ通知　<--- この行をコメントアウトすればLINE通知が止まる
-    print(line_message) # LINE通知の代わりにテストでメッセージを確認する為の画面表示
+    # M_CAMERAに接続するための処理
+    check_camera_cur = common.connect_database_project()
+
+    # m_monitorに接続するための処理
+    check_monitor_cur = common.connect_database_common()
+
+    sel_camera_sql = "SELECT * FROM M_CAMERA WHERE CAMERA_STATUS = '1';"
+
+    # 監視対象のプロジェクト名、対象システムを指定して、監視テーブルの値を取得するSQL。monitor_nameのあとにはcam_itemを入れる
+    sel_monitor_sql = "SELECT * FROM m_monitor WHERE system_name = '" + \
+        common.pj_name + "' AND monitor_name = '"
+
+    # 監視テーブルの値をOKでUPDATEするSQL
+    upd_ok_sql = "UPDATE m_monitor SET MONITOR_STATUS = 'OK' , CHK_TIMESTAMP = NOW() \
+                    WHERE SYSTEM_ID = '" + common.pj_name + "' AND monitor_name = '"
+
+    # 監視テーブルの値をNGUPDATEするSQL
+    upd_ng_sql = "UPDATE m_monitor SET MONITOR_STATUS = 'NG' , CHK_TIMESTAMP = NOW() \
+                    WHERE SYSTEM_ID = '" + common.pj_name + "' AND monitor_name = '"
+
+    # 監視履歴テーブルの値をOKでINSERTするSQL
+    ins_ok_sql = "INSERT INTO h_monitor ( \
+        system_id, system_name, monitor_name, monitor_status, check_time) \
+        VALUES ("
+
+    # 監視履歴テーブルの値をNGでINSERTするSQL
+    ins_ng_sql = "INSERT INTO h_monitor ( \
+        system_id, system_name, monitor_name, monitor_status, check_time) \
+        VALUES( "
+
+    check_camera_cur.execute(sel_camera_sql)
+
+    # 取得したカメラ台数分ループし、チェックする
+    for row in check_camera_cur.fetchall():
+        camera_id = row[0]
+        cam_item = "CAMERA" + format(camera_id)
+        # フォルダの更新日をチェック
+        FILE_TIMESTAMP = datetime.datetime.fromtimestamp(os.path.getmtime(
+            IMAGE_DIR + "/" + format(camera_id) + "/" + format(date_today).replace("-", "")))
+
+        # 画像生成が停止しているか判定
+        if format(FILE_TIMESTAMP) < format(before_5min):
+            # 画像フォルダのタイムスタンプが５分前より古いので画像停止のアラート通知を行う
+
+            # 監視テーブルの値を取得するSQLに、cam_itemを指定して完成させる
+            sel_monitor_sql = sel_monitor_sql + cam_item + "';"
+
+            # 監視テーブルの値を取得
+            check_monitor_cur.execute(sel_monitor_sql)
+
+            for monitor_row in check_monitor_cur.fetchall():
+                sys_id = monitor_row[0]
+                sys_name = monitor_row[1]
+                monitor_name = monitor_row[2]
+                monitor_status = monitor_row[3]
+            if monitor_status == "OK":
+                alert_flg = "ON"  # アラート通知を"ON"にする（画像生成停止のLINE通知）
+                line_message = line_message + "\n" + cam_item + " の画像生成が停止しています。"
+
+            # INSERT句の生成
+            ins_ng_sql = ins_ng_sql + sys_id + ", '" + sys_name + \
+                "', '" + monitor_name + "', 'NG', NOW() )"
+
+            # システム監視テーブルの更新
+            upd_ng_sql = upd_ng_sql + cam_item + "';"
+            check_monitor_cur.execute(upd_ng_sql)
+
+            # 監視履歴テーブルのINSERT
+            check_monitor_cur.execute(ins_ng_sql)
+
+            check_monitor_cur.close()
+        else:
+            # 監視テーブルの値を取得するSQLに、cam_itemを指定して完成させる
+            sel_monitor_sql = sel_monitor_sql + cam_item + "';"
+
+            check_monitor_cur.execute(sel_monitor_sql)
+            for monitor_row in check_monitor_cur.fetchall():
+                monitor_status = monitor_row[3]
+            if monitor_status == "NG":
+                alert_flg = "ON"  # アラート通知を"ON"にする（画像生成再開のLINE通知）
+                line_message = line_message + "\n" + cam_item + " の画像生成を再開しました。"
+
+            # INSERT句の生成
+            ins_ng_sql = ins_ng_sql + sys_id + ", '" + sys_name + \
+                "', '" + monitor_name + "', 'NG', NOW() )"
+
+            # システム監視テーブルの更新（強制的にタイムスタンプを更新）
+            upd_ok_sql = upd_ok_sql + cam_item + "';"
+            check_monitor_cur.execute(upd_ok_sql)
+
+            # 監視履歴テーブルのINSERT
+            check_monitor_cur.execute(ins_ok_sql)
+
+            check_monitor_cur.close()
+
+    # SQLのコミット
+    common.pj_con.commit()
+    common.common_con.commit()
+
+    # 後処理
+    check_camera_cur.close()
+    common.pj_con.close()
+    common.common_con.close()
