@@ -64,7 +64,7 @@ def send_line_message(str_message):
 
     # *********************************************************
     # 動作確認のためコメントアウト
-    # r = requests.post(url, headers=headers, params=payload)
+    r = requests.post(url, headers=headers, params=payload)
     # *********************************************************
 
 
