@@ -110,6 +110,15 @@ def get_data():
         air_temp = data_row[5]
         air_wet = data_row[6]
 
+        # デバッグ用。取得した値を出力する
+        print("日付：" + str(day_tbl))
+        print("時刻：" + str(time_tbl))
+        print("土壌温度" + str(soil_temp))
+        print("土壌湿度" + str(soil_wet))
+        print("土壌電気伝導度" + str(soil_ec))
+        print("気温" + str(air_temp))
+        print("湿度" + str(air_wet))
+
     common.close_con_connect(common.pj_con, data_cur)
 
     # 測定値チェック処理の呼び出し
@@ -137,7 +146,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
         # 測定値が最新でない場合、測定停止のアラート通知を行う
         alert_cur = common.connect_database_project()
 
-        # SYSTEMの値を更新するSQ
+        # SYSTEMの値を更新するSQL
         upd_sys_sql = "UPDATE limit_tbl SET flg_sts = 'NG' WHERE item = 'SYSTEM'"
 
         # SELECTのSQLを実行する
