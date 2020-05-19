@@ -155,6 +155,7 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
     else:
         # 測定値が最新の場合、しきい値チェック処理
         check_cur = common.connect_database_project()
+        update_cur = common.pj_con.cursor()
 
         # しきい値を取得するSQL
         sel_check_sql = "SELECT * FROM limit_tbl WHERE item IN ('SOIL_TEMP','SOIL_WET','AIR_TEMP_1','AIR_WET');"
@@ -162,8 +163,6 @@ def check_data(data_day, data_time, data_s_temp, data_s_wet, data_s_ec, data_a_t
         # しきい値を取得するSQLの実行
         check_cur.execute(sel_check_sql)
 
-        update_cur = common.connect_database_project()
-        
         # しきい値テーブルから取得した値を変数に格納
         for check_row in check_cur.fetchall():
             # テーブルの要素を変数に入れる
