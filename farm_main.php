@@ -479,7 +479,7 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
     </div>
   </div>
 
-  <form action="farm_main_dev.php" method="POST" style="padding-top: 10px;" width="50%">
+  <form action="farm_main.php" method="POST" style="padding-top: 10px;" width="50%">
     <table align="center">
       <thead>
         <th>開始日</th>
