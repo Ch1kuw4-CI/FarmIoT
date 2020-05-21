@@ -489,10 +489,10 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
       <tbody>
         <tr>
           <td>
-            <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 80px;">
+            <input name=" start_date" type="text" class="xxdate" id="startdate" readonly="readonly" style="width: 100px;">
           </td>
           <td>
-            <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 80px;">
+            <input name="end_date" type="text" class="xxdate" id="enddate" readonly="readonly" style="width: 100px;">
           </td>
           <td>
             <input type="number" name="disp_speed" id="disp_speed" value="0.5" step="0.1" min="0.5" max="5.0" style="width: 80px">
