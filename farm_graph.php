@@ -2,11 +2,11 @@
 ini_set("max_execution_time", 180);
 // date_default_timezone_set('Asia/Tokyo');
 
-session_start();
-if (!isset($_SESSION['USER'])) {
-  header('Location: http://160.16.239.88/index.php');
-  exit;
-}
+// session_start();
+// if (!isset($_SESSION['USER'])) {
+//   header('Location: http://160.16.239.88/index.php');
+//   exit;
+// }
 
 $dateStr = date("Ymd");
 $timeStr = date("Hi00");
