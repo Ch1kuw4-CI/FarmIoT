@@ -499,8 +499,8 @@ if (file_exists("images/" . $camera_id . "/" . $dateStr . "/" . $dateStr . "_" .
           </td>
         </tr>
         <tr>
-          <th>開始時間</th>
-          <th>終了時間</th>
+          <th>開始時刻</th>
+          <th>終了時刻</th>
           <th>結合開始</th>
         </tr>
         <tr>
